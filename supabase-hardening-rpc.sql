@@ -14,6 +14,8 @@ grant all on table public.wanted_list_pin_attempts to service_role;
 
 create index if not exists wanted_list_pin_attempts_ip_created_idx
   on public.wanted_list_pin_attempts (ip_key, created_at);
+create index if not exists wanted_list_pin_attempts_created_idx
+  on public.wanted_list_pin_attempts (created_at);
 
 -- Serializa tentativas do mesmo identificador para evitar que requisições
 -- simultâneas ultrapassem o limite por uma corrida entre SELECT e INSERT.
@@ -34,9 +36,9 @@ begin
     pg_catalog.hashtextextended(p_ip_key, 0)
   );
 
+  -- Expira registros antigos globalmente para limitar o crescimento da tabela.
   delete from public.wanted_list_pin_attempts
-   where ip_key = p_ip_key
-     and created_at < pg_catalog.now() - interval '15 minutes';
+   where created_at < pg_catalog.now() - interval '15 minutes';
 
   select count(*)::integer
     into v_attempts
