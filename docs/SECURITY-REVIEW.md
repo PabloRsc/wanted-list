@@ -39,5 +39,7 @@ Não aplicar uma migração SQL genérica sem conferir o esquema real. Os nomes 
 
 - Código do importador atualizado no GitHub.
 - Cache do PWA atualizado.
-- Proteções da Edge Function e do banco ainda não implantadas.
+- Migração `supabase-hardening-rpc.sql` criada para rate limit atômico e limpeza de tentativas expiradas; ainda não aplicada.
+- A Edge Function ainda precisa ser atualizada para chamar as RPCs; até isso acontecer, a migração sozinha não altera o comportamento do endpoint.
+- Proteções de concorrência no salvamento do estado ainda não implementadas.
 - Não foi possível verificar o deploy do Cloudflare Pages nem executar testes contra o projeto Supabase nesta etapa.
