@@ -247,3 +247,64 @@ dialog .modal{
 
 /* Baús privados */
 .privacy-toggle{display:flex!important;align-items:flex-start;gap:10px;padding:12px;border:1px solid #806039;border-radius:10px;background:#211d19}.privacy-toggle input{width:18px!important;height:18px;margin:2px 0 0;accent-color:#c89b5d}.privacy-toggle span{display:flex;flex-direction:column;gap:4px}.privacy-toggle small{font-weight:400;color:#c8b99f}.list-privacy{font-size:10px;letter-spacing:1px;color:#e9bd76;margin:6px 0 10px}
+
+
+/* Wanted List — responsive refresh for iPhone 15 Pro and desktop */
+.list-card{min-width:0;transition:transform .18s ease,border-color .18s ease}
+.list-card:hover{transform:translateY(-3px);border-color:#d4a65f}
+.list-cover{height:clamp(150px,17vw,220px);background-position:center;background-size:cover;background-repeat:no-repeat}
+.list-cover:after{pointer-events:none}
+.list-body{padding:15px 16px 16px}
+.list-body h3{overflow-wrap:anywhere;line-height:1.12}
+.list-body p{line-height:1.4;overflow-wrap:anywhere}
+.list-meta{align-items:center;gap:10px;flex-wrap:wrap}
+.list-meta b{white-space:nowrap}
+.cover-editor{display:none;margin:14px 0 4px;padding:12px;border:1px solid #6d5335;border-radius:12px;background:#17191b}
+.cover-editor.has-image{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(150px,.85fr);gap:14px;align-items:center}
+.cover-preview{height:150px;min-width:0;overflow:hidden;border:2px solid #8d6537;border-radius:9px;background:#292b2d}
+.cover-preview img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.cover-adjust{min-width:0}
+.cover-adjust label{font-size:12px!important;margin:7px 0!important}
+.cover-adjust input[type=range]{display:block;width:100%;padding:0;accent-color:#d9a85f;min-height:24px!important}
+.cover-adjust small{display:block;font-size:11px;line-height:1.35}
+@media(min-width:901px){
+ .wishlist-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+}
+@media(max-width:900px){
+ .hero{margin-left:0}
+ .main{padding-left:clamp(12px,3vw,22px);padding-right:clamp(12px,3vw,22px)}
+ .wishlist-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .list-cover{height:clamp(125px,25vw,190px)}
+ .list-body{padding:12px}
+ .list-body h3{font-size:21px}
+ .list-body p{min-height:0;margin-bottom:10px}
+ .list-actions{gap:7px}
+ .list-actions button{min-height:38px}
+}
+@media(max-width:560px){
+ .hero{height:112px;min-height:112px}
+ .topline{margin-bottom:16px;padding-bottom:10px}
+ .section-head{margin:16px 0 12px;align-items:center}
+ .section-head>div{min-width:0}
+ .section-head h2{font-size:22px;line-height:1.1}
+ .section-head .red-btn{flex:0 0 auto;padding:10px 11px;font-size:12px;white-space:nowrap}
+ .wishlist-grid{grid-template-columns:1fr;gap:14px}
+ .list-card{border-radius:13px}
+ .list-cover{height:auto;aspect-ratio:16/7;min-height:145px;max-height:205px;background-position:center}
+ .list-body{padding:13px 14px 14px}
+ .list-body h3{font-size:23px;margin-bottom:5px}
+ .list-body p{font-size:13px;margin-bottom:10px}
+ .list-privacy{margin:7px 0 9px}
+ .list-meta{font-size:12px}
+ .list-actions{margin-top:12px}
+ .list-actions button{padding:8px 10px;font-size:13px}
+ .cover-editor.has-image{grid-template-columns:1fr;gap:10px}
+ .cover-preview{height:clamp(150px,48vw,220px)}
+ .cover-adjust{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .cover-adjust small{grid-column:1/-1}
+}
+@media(max-width:390px){
+ .section-head h2{font-size:20px}
+ .list-cover{aspect-ratio:16/8;min-height:135px}
+ .list-body h3{font-size:21px}
+}
