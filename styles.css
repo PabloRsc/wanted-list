@@ -344,3 +344,7 @@ dialog .modal{
  #coverEditor.cover-editor{padding:9px!important;gap:7px!important}
  #wishlistForm .modal-actions{position:sticky!important;bottom:-14px!important;z-index:5!important;background:linear-gradient(180deg,#202326ee,#202326 35%)!important;padding:12px 0 4px!important;margin-top:8px!important}
 }
+
+/* Hard cap for the crop viewport on iOS Safari/PWA */
+#coverPreviewFrame.cover-preview{height:clamp(130px,32vw,190px)!important;min-height:130px!important;max-height:190px!important;aspect-ratio:auto!important;overflow:hidden!important;flex:none!important}
+#coverPreviewFrame #coverPreview{height:100%!important;width:100%!important;max-height:none!important;max-width:none!important;object-fit:cover!important}
