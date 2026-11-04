@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wanted-list-pwa-cloudfix1';
+const CACHE_NAME = 'wanted-list-pwa-cloudtimeout2';
 const APP_SHELL = [
   './',
   './index.html',
