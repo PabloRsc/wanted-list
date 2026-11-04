@@ -17,8 +17,9 @@ Os arquivos deste repositório preparam a correção, mas não alteram automatic
 4. Executar `supabase-hardening-rpc.sql` no SQL Editor.
 5. Executar `supabase-state-save-rpc.sql` no SQL Editor.
 6. Publicar exatamente `supabase/functions/wanted-list-secure/index.ts` como a Edge Function `wanted-list-secure`.
-7. Executar `supabase-secure-migration.sql` para revogar o acesso direto de anon/authenticated. Só fazer isso depois de a Edge Function nova estar publicada.
-8. Testar todos os cenários abaixo antes de considerar a segurança concluída.
+7. Testar primeiro load, desbloqueio, criação de baú privado e salvamentos com as permissões atuais ainda ativas.
+8. Somente se os testes funcionarem, executar `supabase-secure-migration.sql` para revogar o acesso direto de anon/authenticated.
+9. Repetir load e salvamento após a migração e confirmar que o acesso direto à tabela é negado.
 
 ## O que a Edge Function faz
 
