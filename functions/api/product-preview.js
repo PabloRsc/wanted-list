@@ -4,7 +4,7 @@ const TIMEOUT_MS = 10_000;
 function validPublicUrl(value) {
   let url;
   try { url = new URL(value); } catch { throw new Error("LINK_INVALIDO"); }
-  if (!["http:", "https:"].includes(url.protocol)) throw new Error("LINK_INVALIDO");
+  if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || (url.port && !["80", "443"].includes(url.port))) throw new Error("LINK_INVALIDO");
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
   if (!host || host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") || host.endsWith(".internal")) throw new Error("DESTINO_NAO_PERMITIDO");
   if (/^(127\.|10\.|192\.168\.|169\.254\.|0\.)/.test(host) || /^172\.(1[6-9]|2\d|3[01])\./.test(host) || host === "::1" || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80:")) throw new Error("DESTINO_NAO_PERMITIDO");
