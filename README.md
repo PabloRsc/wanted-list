@@ -33,4 +33,4 @@ Cada commit na branch `main` dispara uma nova publicação. O service worker man
 - A sincronização requer conexão com a internet.
 - O cache offline serve os arquivos do app, não permite garantir gravações offline.
 - Faça exportações periódicas de backup em Configurações.
-- Preços são informados manualmente; não há consulta automática às lojas.
+- Importação de produtos por link tenta extrair título, imagem e preço dos metadados públicos do anúncio; lojas podem bloquear a consulta ou omitir informações, que continuam editáveis manualmente.
