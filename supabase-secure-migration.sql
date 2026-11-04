@@ -1,5 +1,5 @@
 -- Wanted List 1.9 — bloquear acesso direto do navegador à tabela completa.
--- Execute no SQL Editor do Supabase ANTES de publicar a Edge Function.
+-- Execute no SQL Editor do Supabase SOMENTE DEPOIS de publicar e testar a Edge Function.
 -- Os dados existentes permanecem na tabela; nenhuma linha é apagada.
 
 alter table public.wanted_list_state enable row level security;
