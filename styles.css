@@ -354,3 +354,5 @@ dialog .modal{
 @media(max-width:560px){
  .list-cover{height:auto;aspect-ratio:16/6.5;min-height:160px;max-height:225px}
 }
+
+.poster-chests{font-size:11px;color:#a98758;margin-top:6px;line-height:1.3;overflow-wrap:anywhere}.product-chest-context{padding:10px 12px;border:1px solid #765a37;border-radius:9px;background:#252321;color:#e9c98f;font-size:13px}.product-chest-context strong{color:#f4dfb8}
