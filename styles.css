@@ -308,3 +308,5 @@ dialog .modal{
  .list-cover{aspect-ratio:16/8;min-height:135px}
  .list-body h3{font-size:21px}
 }
+
+.cover-preview{position:relative;touch-action:none;cursor:grab;user-select:none}.cover-preview.is-dragging{cursor:grabbing}.cover-preview img{position:absolute;inset:0;transform-origin:center;will-change:transform;pointer-events:none}.cover-adjust strong{display:block;color:#f1d19b;font-size:13px;margin-bottom:8px}.cover-adjust label{display:block}.cover-adjust input[type=range]{width:100%;accent-color:#d9a85f}.list-cover{position:relative;overflow:hidden;display:grid;place-items:center}.list-cover>img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transform-origin:center}@media(max-width:560px){.cover-preview{height:clamp(170px,55vw,240px)}}
