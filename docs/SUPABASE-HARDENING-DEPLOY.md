@@ -49,7 +49,7 @@ Os arquivos deste repositório preparam a correção, mas não alteram automatic
 - Não colocar `SERVICE_ROLE_KEY` nem senha em arquivos do GitHub, frontend ou mensagens.
 - O app mantém a senha privada apenas em memória durante a sessão; recarregar a página exigirá desbloquear novamente.
 - O endpoint é público. CORS não é autenticação.
-- O rate limit depende de um IP de origem confiável fornecido pelo gateway. Se o gateway não fornecer um cabeçalho confiável, o fallback usa um bucket compartilhado, limitando todos os clientes juntos em vez de confiar em um valor arbitrário do cliente.
+- O rate limit usa somente `cf-connecting-ip`; não confia em `x-forwarded-for`. Confirme no ambiente Supabase que o gateway sobrescreve `cf-connecting-ip`. Se o cabeçalho estiver ausente, todos os clientes compartilham o bucket `unknown`, o que é seguro contra falsificação, mas pode limitar o uso legítimo em conjunto.
 - Os cartões dos baús privados continuam visíveis publicamente por decisão de produto; nome, descrição, capa e identificador do baú não são secretos.
 - A migração SQL pressupõe o esquema atual de uma única linha em `wanted_list_state`. Não executar se o esquema real divergir.
 - A proteção não está ativa até executar as migrações, publicar a Edge Function e concluir os testes.
