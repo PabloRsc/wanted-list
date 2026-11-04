@@ -181,12 +181,11 @@ async function importProductFromLink(){
     if(!response.ok)throw new Error(result.error||'Não foi possível consultar esse anúncio.');
     $('#productUrl').value=result.url||parsed.href;
     $('#productImportUrl').value=result.url||parsed.href;
-    if(result.title)$('#productName').value=result.title;
     if(result.price!==''&&result.price!==null&&result.price!==undefined&&Number.isFinite(Number(result.price)))$('#productPrice').value=Number(result.price).toFixed(2);
     if(result.store)$('#productStore').value=result.store;
-    if(result.image){pendingProductImage=result.image;status.textContent='Dados encontrados! A imagem, o nome e o preço foram preenchidos quando disponíveis.'}
-    else status.textContent='Anúncio consultado. Nome e preço preenchidos quando disponíveis; não foi possível obter a imagem. Você pode adicioná-la manualmente.';
-    if(!result.found)status.textContent='A loja não forneceu metadados reconhecíveis. Preencha os campos manualmente.';
+    if(result.image){pendingProductImage=result.image;status.textContent='Imagem encontrada. Preço e loja preenchidos quando disponíveis; seu nome personalizado foi preservado.'}
+    else status.textContent='Anúncio consultado. Não foi possível obter a imagem; você pode adicioná-la manualmente. Seu nome personalizado foi preservado.';
+    if(!result.found)status.textContent='A loja não forneceu dados reconhecíveis. Preencha imagem e preço manualmente; seu nome foi preservado.';
     if(result.currency&&result.currency!=='BRL')status.textContent+=' Atenção: moeda identificada '+result.currency+'. Confira o preço antes de salvar.';
   }catch(error){status.textContent=error.message||'Falha ao buscar o anúncio.';toast('Não foi possível importar os dados do anúncio.')}
   finally{button.disabled=false;button.textContent='Buscar'}
