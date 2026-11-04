@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const KEY='wanted-list-cloud-v1', SCHEMA_VERSION=2;
 const defaults={schemaVersion:SCHEMA_VERSION,lists:[],products:[],history:[]};
-let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50,coverZoom=1;
+let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50,coverZoom=1,currentListContextId=null;
 let remoteSaveTimer=null, remoteReady=false, remoteSaving=false;
 const unlockedPrivateLists=new Set();
 let privateAccessPin='';
@@ -117,7 +117,7 @@ function dateLabel(v){if(!v)return '—';const d=new Date(v);return Number.isNaN
 function go(view){const target=$('#view-'+view);if(!target)return;$$('.view').forEach(v=>v.classList.add('hidden'));target.classList.remove('hidden');$$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===view));const crumbIcons={products:'gomu_gomu.png',wishlists:'luffy-flag.png',conquered:'nami.png',summary:'robin.png',settings:'franky.png'};
 const crumbLabels={products:'Produtos',wishlists:'Baús do Tesouro',conquered:'Tesouros conquistados',summary:'Resumo',settings:'Configurações'};
 $('#crumb').innerHTML=`<img class="crumb-icon" src="assets/icons/${crumbIcons[view]||'robin.png'}" alt=""> ${crumbLabels[view]||view}`;render()}
-$$('.nav').forEach(n=>n.onclick=()=>go(n.dataset.view));$$('[data-go]').forEach(n=>n.onclick=()=>go(n.dataset.go));
+$('.nav').forEach(n=>n.onclick=()=>{currentListContextId=null;go(n.dataset.view)});$$('[data-go]').forEach(n=>n.onclick=()=>go(n.dataset.go));
 
 function readImage(file,cb){
   if(!file)return;
@@ -176,7 +176,9 @@ function openProduct(p=null){
   $('#productStore').value=p?.store||'';$('#productUrl').value=p?.url||'';
   $('#productNotes').value=p?.notes||'';$('#productPaidPrice').value=p?.paidPrice??'';
   $('#productPurchaseDate').value=p?.purchaseDate||'';
-  $('#productLists').innerHTML=data.lists.map(l=>`<label class="list-check"><input type="checkbox" value="${esc(l.id)}" ${(p?.lists||[]).includes(l.id)?'checked':''}><span>${esc(l.name)}</span></label>`).join('')||'<small>Crie um baú para organizar este produto.</small>'; 
+  const contextList=data.lists.find(l=>l.id===currentListContextId);
+  if(contextList){$('#productLists').innerHTML=`<div class="product-chest-context">🧰 Este tesouro será vinculado automaticamente ao baú <strong>${esc(contextList.name)}</strong>.</div>`;$('#productLists').closest('.field-label').classList.add('context-locked')}
+  else{$('#productLists').closest('.field-label').classList.remove('context-locked');$('#productLists').innerHTML=data.lists.map(l=>`<label class="list-check"><input type="checkbox" value="${esc(l.id)}" ${(p?.lists||[]).includes(l.id)?'checked':''}><span>${esc(l.name)}</span></label>`).join('')||'<small>Crie um baú para organizar este produto.</small>'} 
   $('#productImage').value='';
   $('#productDialog').showModal()
 }
@@ -190,7 +192,7 @@ $('#productForm').onsubmit=e=>{
   const urlInput=$('#productUrl').value.trim(),url=safeUrl(urlInput);
   if(urlInput&&!url){toast('Informe um link válido começando com http:// ou https://.');return}
   const pid=$('#productId').value,p=data.products.find(x=>x.id===pid);
-  const lists=[...$('#productLists').querySelectorAll('input[type=checkbox]:checked')].map(o=>o.value);
+  const contextList=data.lists.find(l=>l.id===currentListContextId);const lists=contextList?[...new Set([...(p?.lists||[]),contextList.id])]:[...$('#productLists').querySelectorAll('input[type=checkbox]:checked')].map(o=>o.value);
   const paidRaw=$('#productPaidPrice').value;if(paidRaw!==''&&!validPrice(paidRaw)){toast('Informe um preço pago válido (zero ou maior).');return}const paidPrice=paidRaw===''?null:Number(paidRaw);
   if(p){
     if(Number(p.price)!==price)recordPrice(p.id,price);
@@ -213,11 +215,12 @@ document.querySelectorAll('#wishlistDialog .close, #wishlistDialog .modal-action
 });
 function poster(p){
   const status=p.status||'Desejado',cls=status==='Comprado'?'bought':status==='Desistido'?'given':'';
-  return `<article class="poster" style="--tilt:${(parseInt(p.id.slice(-2),36)%5-2)*.35}deg" data-product="${esc(p.id)}"><div class="poster-title">WANTED</div><div class="poster-img">${p.image?`<img src="${p.image}" alt="">`:'🏴‍☠️'}</div><div class="poster-status ${cls}">${esc(status.toUpperCase())}</div><div class="poster-name">${esc(p.name)}</div><div class="poster-price">${money(p.price)}</div><div class="poster-store">⚓ ${esc(p.store||'Loja não informada')}</div></article>`
+  return `<article class="poster" style="--tilt:${(parseInt(p.id.slice(-2),36)%5-2)*.35}deg" data-product="${esc(p.id)}"><div class="poster-title">WANTED</div><div class="poster-img">${p.image?`<img src="${p.image}" alt="">`:'🏴‍☠️'}</div><div class="poster-status ${cls}">${esc(status.toUpperCase())}</div><div class="poster-name">${esc(p.name)}</div><div class="poster-price">${money(p.price)}</div><div class="poster-store">⚓ ${esc(p.store||'Loja não informada')}</div><div class="poster-chests">🧰 ${esc((p.lists||[]).map(listId=>data.lists.find(l=>l.id===listId)?.name).filter(Boolean).join(' · ')||'Sem baú')}</div></article>`
 }
 function canSeeProduct(p){
-  const privateLists=(p.lists||[]).map(id=>data.lists.find(l=>l.id===id)).filter(l=>l&&l.isPrivate);
-  return privateLists.length===0||privateLists.every(l=>unlockedPrivateLists.has(l.id));
+  const privateLists=(p.lists||[]).map(listId=>data.lists.find(l=>l.id===listId)).filter(l=>l&&l.isPrivate);
+  if(!privateLists.length)return true;
+  return !!currentListContextId&&privateLists.some(l=>l.id===currentListContextId)&&privateLists.every(l=>unlockedPrivateLists.has(l.id));
 }
 function listCard(l){
   const locked=l.isPrivate&&!unlockedPrivateLists.has(l.id);
@@ -250,7 +253,7 @@ function render(){
   $('#summaryRecentProducts').innerHTML=visibleProducts.slice().sort((a,b)=>String(b.created).localeCompare(String(a.created))).slice(0,4).map(p=>`<button class="summary-product-row" type="button" data-product="${esc(p.id)}"><span class="summary-product-status ${p.status==='Comprado'?'is-bought':p.status==='Desistido'?'is-abandoned':''}"></span><span class="summary-row-main"><b>${esc(p.name)}</b><small>${esc(p.store||'Loja não informada')}</small></span><strong>${money(p.price)}</strong></button>`).join('')||'<p class="muted">Seus produtos recentes aparecerão aqui.</p>';
   $('#priceHistory').innerHTML=data.history.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,20).map(h=>{const p=visibleProducts.find(p=>p.id===h.productId);return p?`<div class="history-row"><span>${esc(p.name)} · ${dateLabel(h.date)}</span><b>${money(h.price)}</b></div>`:''}).join('')||'<p class="muted">As alterações de preço aparecerão aqui.</p>';
   $$('[data-product]').forEach(el=>el.onclick=()=>showProduct(el.dataset.product));
-  $$('[data-list]').forEach(el=>el.onclick=e=>{if(e.target.closest('button'))return;const l=lists.find(x=>x.id===el.dataset.list);if(l){if(l.isPrivate&&!unlockedPrivateLists.has(l.id)){unlockPrivateChest(l.id).then(ok=>{if(ok){go('products');$('#filterStatus').value='Desejado';$('#filterList').value=l.id;render()}});return}go('products');$('#filterStatus').value='Desejado';$('#filterList').value=l.id;render()}});
+  $('[data-list]').forEach(el=>el.onclick=e=>{if(e.target.closest('button'))return;const l=lists.find(x=>x.id===el.dataset.list);if(l){const enter=()=>{currentListContextId=l.id;go('products');$('#filterStatus').value='';$('#filterList').value=l.id;render()};if(l.isPrivate&&!unlockedPrivateLists.has(l.id)){unlockPrivateChest(l.id).then(ok=>{if(ok)enter()});return}enter()}});
   $$('[data-edit-list]').forEach(b=>b.onclick=e=>{e.stopPropagation();const l=lists.find(x=>x.id===b.dataset.editList);if(l)openWishlist(l)});
   $$('[data-delete-list]').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteWishlist(b.dataset.deleteList)});
 }
