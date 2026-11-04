@@ -68,7 +68,7 @@
   </div>
   <label>Ou envie sua própria imagem<input type="file" id="listImage" accept="image/*"></label>
   <button type="button" class="ghost-btn cover-adjust-toggle" id="toggleCoverAdjust" hidden>Ajustar enquadramento</button>
-  <section class="cover-editor" id="coverEditor" aria-label="Ajustar enquadramento da capa"><div class="cover-preview"><img id="coverPreview" alt="Prévia da capa"></div><div class="cover-adjust"><label>Posição horizontal <input id="coverX" type="range" min="0" max="100" value="50"></label><label>Posição vertical <input id="coverY" type="range" min="0" max="100" value="50"></label><small>Arraste os controles para escolher qual parte da imagem ficará visível.</small></div></section>
+  <section class="cover-editor" id="coverEditor" aria-label="Ajustar enquadramento da capa"><div class="cover-preview" id="coverPreviewFrame"><img id="coverPreview" alt="Prévia do recorte da capa"></div><div class="cover-adjust"><small>Arraste a imagem dentro da moldura para escolher o enquadramento.</small><label>Posição horizontal <input id="coverX" type="range" min="0" max="100" value="50"></label><label>Posição vertical <input id="coverY" type="range" min="0" max="100" value="50"></label></div></section>
   <div class="modal-actions"><button class="ghost-btn" value="cancel">Cancelar</button><button class="red-btn" id="saveWishlist" value="default">Criar Baú</button></div>
 </form>
 </dialog>
