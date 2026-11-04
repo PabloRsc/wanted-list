@@ -114,7 +114,7 @@ function money(v){return '฿ '+Number(v||0).toLocaleString('pt-BR',{minimumFrac
 function toast(t){let el=$('#toast');if(!el)return;el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function dateLabel(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleDateString('pt-BR')}
-function go(view){const target=$('#view-'+view);if(!target)return;$$('.view').forEach(v=>v.classList.add('hidden'));target.classList.remove('hidden');$$$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===view));const crumbIcons={products:'gomu_gomu.png',wishlists:'luffy-flag.png',conquered:'nami.png',summary:'robin.png',settings:'franky.png'};
+function go(view){const target=$('#view-'+view);if(!target)return;$$('.view').forEach(v=>v.classList.add('hidden'));target.classList.remove('hidden');$$$$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===view));const crumbIcons={products:'gomu_gomu.png',wishlists:'luffy-flag.png',conquered:'nami.png',summary:'robin.png',settings:'franky.png'};
 const crumbLabels={products:'Produtos',wishlists:'Baús do Tesouro',conquered:'Tesouros conquistados',summary:'Resumo',settings:'Configurações'};
 $('#crumb').innerHTML=`<img class="crumb-icon" src="assets/icons/${crumbIcons[view]||'robin.png'}" alt=""> ${crumbLabels[view]||view}`;render()}
 $('.nav').forEach(n=>n.onclick=()=>{currentListContextId=null;go(n.dataset.view)});$$('[data-go]').forEach(n=>n.onclick=()=>go(n.dataset.go));
