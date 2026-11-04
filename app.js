@@ -89,7 +89,7 @@ function scheduleCloudSave(){
 }
 function validPrice(v){return v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v))&&Number(v)>=0}
 function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
-function safeImage(value){return typeof value==='string'&&/^data:image\/(?:png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i.test(value)&&value.length<8*1024*1024?value:''}
+function safeImage(value){return typeof value==='string'&&((/^data:image\/(?:png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i.test(value)&&value.length<8*1024*1024)||(/^https?:\/\//i.test(value)&&value.length<2048))?value:''}
 function load(){return clone(defaults)}
 function save(){
   try{
@@ -169,8 +169,32 @@ function deleteWishlist(listId){
   data.lists=data.lists.filter(l=>l.id!==listId);data.products.forEach(p=>p.lists=(p.lists||[]).filter(x=>x!==listId));
   if(save())toast('Baú excluído. Os produtos foram preservados.')
 }
+async function importProductFromLink(){
+  const input=$('#productImportUrl'),status=$('#productImportStatus'),button=$('#importProductLink');
+  const url=input.value.trim();
+  if(!url){toast('Cole o link do anúncio primeiro.');return}
+  let parsed;try{parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol))throw new Error()}catch{status.textContent='Informe um endereço válido começando com http:// ou https://.';return}
+  button.disabled=true;button.textContent='Buscando…';status.textContent='Consultando os dados públicos do anúncio…';
+  try{
+    const response=await fetch('/api/product-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:parsed.href}),cache:'no-store'});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.error||'Não foi possível consultar esse anúncio.');
+    $('#productUrl').value=result.url||parsed.href;
+    $('#productImportUrl').value=result.url||parsed.href;
+    if(result.title)$('#productName').value=result.title;
+    if(result.price!==''&&result.price!==null&&result.price!==undefined&&Number.isFinite(Number(result.price)))$('#productPrice').value=Number(result.price).toFixed(2);
+    if(result.store)$('#productStore').value=result.store;
+    if(result.image){pendingProductImage=result.image;status.textContent='Dados encontrados! A imagem, o nome e o preço foram preenchidos quando disponíveis.'}
+    else status.textContent='Anúncio consultado. Nome e preço preenchidos quando disponíveis; não foi possível obter a imagem. Você pode adicioná-la manualmente.';
+    if(!result.found)status.textContent='A loja não forneceu metadados reconhecíveis. Preencha os campos manualmente.';
+    if(result.currency&&result.currency!=='BRL')status.textContent+=' Atenção: moeda identificada '+result.currency+'. Confira o preço antes de salvar.';
+  }catch(error){status.textContent=error.message||'Falha ao buscar o anúncio.';toast('Não foi possível importar os dados do anúncio.')}
+  finally{button.disabled=false;button.textContent='Buscar'}
+}
+$('#importProductLink').onclick=importProductFromLink;
+$('#productImportUrl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();importProductFromLink()}});
 function openProduct(p=null){
-  pendingProductImage='';$('#productForm').reset();$('#productId').value=p?.id||'';
+  pendingProductImage='';$('#productForm').reset();$('#productImportUrl').value=p?.url||'';$('#productImportStatus').textContent='Você poderá revisar e editar os dados antes de salvar.';$('#productId').value=p?.id||'';
   $('#productModalTitle').textContent=p?'Editar tesouro':'Novo tesouro';
   $('#productName').value=p?.name||'';$('#productPrice').value=p?.price??'';
   $('#productStore').value=p?.store||'';$('#productUrl').value=p?.url||'';
