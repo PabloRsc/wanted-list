@@ -356,3 +356,15 @@ dialog .modal{
 }
 
 .poster-chests{font-size:11px;color:#a98758;margin-top:6px;line-height:1.3;overflow-wrap:anywhere}.product-chest-context{padding:10px 12px;border:1px solid #765a37;border-radius:9px;background:#252321;color:#e9c98f;font-size:13px}.product-chest-context strong{color:#f4dfb8}
+
+/* Product URL importer */
+.product-import-box{margin:14px 0;padding:13px;border:1px solid #8b693f;border-radius:11px;background:linear-gradient(135deg,#29251f,#1b1d1e)}
+.product-import-heading{display:flex;flex-direction:column;gap:4px;margin-bottom:9px;color:#f0d4a0}
+.product-import-heading strong{font:20px 'Pirata One'}
+.product-import-heading small,.product-import-status{font-size:12px;color:#c9bdad;line-height:1.4}
+.product-import-row{display:flex;gap:8px;align-items:stretch}
+.product-import-row input{min-width:0;flex:1}
+.product-import-row button{flex:0 0 auto;min-width:94px}
+.product-import-status{margin:8px 0 0}
+#importProductLink:disabled{opacity:.65;cursor:wait}
+@media(max-width:480px){.product-import-row{flex-direction:column}.product-import-row button{width:100%}}
