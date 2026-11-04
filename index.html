@@ -14,17 +14,17 @@
   <aside class="sidebar">
     <div class="brand"><span class="brand-skull"><img src="assets/icons/law-logo.png" alt="Símbolo dos Piratas do Coração"></span><div><b>WANTED LIST</b><small>CAPITÃO DO SEU TESOURO</small></div></div>
     <nav>
-      <button class="nav" data-view="wishlists"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/luffy-flag.png" alt=""></span><span>Baús do Tesouro</span></button>
+      <button class="nav active" data-view="wishlists"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/luffy-flag.png" alt=""></span><span>Baús do Tesouro</span></button>
       <button class="nav" data-view="products"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/gomu_gomu.png" alt=""></span><span>Produtos</span></button>
       <button class="nav" data-view="conquered"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/nami.png" alt=""></span><span>Tesouros conquistados</span></button>
-      <button class="nav active" data-view="summary"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/robin.png" alt=""></span><span>Resumo</span></button>
+      <button class="nav" data-view="summary"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/robin.png" alt=""></span><span>Resumo</span></button>
       <button class="nav" data-view="settings"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/franky.png" alt=""></span><span>Configurações</span></button>
     </nav>
     <div class="sidebar-foot">FEITO PARA GRANDES AVENTURAS</div>
   </aside>
   <main class="main">
-    <div class="topline"><span id="crumb"><img class="crumb-icon" src="assets/icons/robin.png" alt=""> Resumo</span><span class="local-pill">● CONECTANDO À NUVEM…</span></div>
-    <section id="view-summary" class="view">
+    <div class="topline"><span id="crumb"><img class="crumb-icon" src="assets/icons/luffy-flag.png" alt=""> Baús do Tesouro</span><span class="local-pill">● CONECTANDO À NUVEM…</span></div>
+    <section id="view-summary" class="view hidden">
       <div class="dashboard-welcome"><div><small class="eyebrow">AHOY, CAPITÃO!</small><h2>Seu diário de bordo</h2><p>Acompanhe seus desejos, os baús que criou e os tesouros que já conquistou.</p></div><div class="dashboard-actions"><button class="gold-btn" id="dashboardNewList">＋ Novo Baú</button><button class="red-btn" id="dashboardNewProduct">＋ Adicionar produto</button></div></div>
       <div class="section-head dashboard-section-head"><div><small class="eyebrow">VISÃO GERAL DA AVENTURA</small><h2>Seus tesouros em números</h2></div></div>
       <div id="stats" class="stats-grid"></div>
@@ -38,7 +38,7 @@
       </div>
       <div class="panel"><h3>📉 Histórico recente de preços</h3><div id="priceHistory"></div></div>
     </section>
-    <section id="view-wishlists" class="view hidden">
+    <section id="view-wishlists" class="view">
       <div class="section-head"><div><small class="eyebrow">MAPA DAS SUAS AVENTURAS</small><h2><img class="heading-icon" src="assets/icons/luffy-flag.png" alt=""> Baús do Tesouro</h2></div><button class="red-btn" id="newWishlist">＋ Criar Baú</button></div>
       <div id="allLists" class="wishlist-grid"></div>
     </section>
