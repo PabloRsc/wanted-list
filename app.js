@@ -11,8 +11,8 @@ function cloudHeaders(extra={}){return {'apikey':cloudConfig.key,'Authorization'
 async function secureApi(action,payload={},pin=''){
   if(!cloudConfig.url||!cloudConfig.key)throw new Error('Configuração Supabase ausente');
   const base=cloudConfig.url.replace(/\/$/,'');
-  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);let response;try{response=await fetch(base+'/functions/v1/wanted-list-secure',{method:'POST',headers:cloudHeaders(),body:JSON.stringify({action,payload,pin}),cache:'no-store',signal:controller.signal})}catch(error){if(error.name==='AbortError')throw new Error('TEMPO_ESGOTADO: o Supabase não respondeu em 15 segundos.');throw new Error('REDE: '+(error.message||'falha ao acessar o Supabase'))}finally{clearTimeout(timeout)}
-  const body=await response.text();let parsed={};try{parsed=body?JSON.parse(body):{}}catch{}
+  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);let response,body;try{response=await fetch(base+'/functions/v1/wanted-list-secure',{method:'POST',headers:cloudHeaders(),body:JSON.stringify({action,payload,pin}),cache:'no-store',signal:controller.signal});body=await response.text()}catch(error){if(error.name==='AbortError')throw new Error('TEMPO_ESGOTADO: a chamada ao Supabase não foi concluída em 15 segundos.');throw new Error('REDE: '+(error.message||'falha ao acessar o Supabase'))}finally{clearTimeout(timeout)}
+  let parsed={};try{parsed=body?JSON.parse(body):{}}catch{}
   if(!response.ok)throw new Error(parsed.error||('Função segura '+response.status));
   return parsed;
 }
