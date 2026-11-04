@@ -63,3 +63,13 @@ Em 2026-11-04 foi adicionada a implementação revisada em `supabase/functions/w
 A função chama as RPCs de rate limit e salvamento transacional, valida o payload e limita o corpo durante a leitura do stream. A ordem de implantação está em `docs/SUPABASE-HARDENING-DEPLOY.md`.
 
 **Ainda não implantado/verificado no Supabase:** as migrações SQL não foram executadas, o secret `PRIVATE_CHEST_PIN` não foi alterado, a Edge Function não foi publicada e os testes de integração não foram executados. Portanto, esta revisão de código não equivale à ativação da proteção em produção.
+
+
+### Correções adicionais de revisão — 2026-11-04
+
+- Corrigida a validação do PIN no frontend: agora aceita a senha de 16 a 128 caracteres exigida pela Edge Function (antes havia uma validação residual de exatamente quatro dígitos).
+- Corrigida a RPC para também exigir autenticação ao criar um baú privado quando a tabela ainda não possui a linha inicial.
+- O rate limit deixou de usar `x-forwarded-for`; usa apenas `cf-connecting-ip` e cai em um bucket compartilhado se o cabeçalho estiver ausente. Antes da publicação, confirmar que o gateway Supabase define esse cabeçalho de forma confiável.
+- Atualizado o cache do PWA e corrigida a orientação de ordem da migração que revoga acesso direto à tabela.
+
+Essas correções estão versionadas, mas continuam pendentes de execução e validação no projeto Supabase real.
