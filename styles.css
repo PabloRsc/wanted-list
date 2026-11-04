@@ -322,3 +322,25 @@ dialog .modal{
 .cover-adjust label{display:block!important;min-width:0!important;margin:2px 0!important}
 .cover-adjust input[type=range]{width:100%!important;min-height:25px!important;padding:0!important}
 @media(max-width:560px){.cover-editor.has-image.is-open{grid-template-columns:1fr!important}.cover-preview{height:auto!important;aspect-ratio:16/7!important;max-height:160px!important}.cover-adjust{grid-template-columns:1fr 1fr!important}}
+
+/* Cover editor: compact WhatsApp-like crop viewport */
+#coverEditor.cover-editor{display:none!important;box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:8px 0 2px!important;padding:10px!important;border:1px solid #654c32!important;border-radius:14px!important;background:#17191b!important;overflow:hidden!important}
+#coverEditor.cover-editor.has-image.is-open{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+#toggleCoverAdjust.cover-adjust-toggle{display:flex!important;width:100%!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;min-height:48px!important;margin:10px 0 0!important;padding:11px 14px!important;text-align:left!important;font-size:15px!important;border-radius:12px!important}
+#toggleCoverAdjust[hidden]{display:none!important}
+#toggleCoverAdjust .cover-chevron{margin-left:auto;font-size:20px}
+#coverPreviewFrame.cover-preview{position:relative!important;display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/7!important;min-height:0!important;max-height:155px!important;margin:0!important;overflow:hidden!important;border:1px solid #80603b!important;border-radius:11px!important;background:#252525!important;touch-action:none!important;cursor:grab!important}
+#coverPreviewFrame.is-dragging{cursor:grabbing!important}
+#coverPreviewFrame #coverPreview{position:absolute!important;display:block!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:50% 50%;transform-origin:center center!important;pointer-events:none!important;user-select:none!important}
+#coverPreviewFrame .crop-grid{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,transparent 33.1%,#fff5 33.3%,transparent 33.6%,transparent 66.4%,#fff5 66.6%,transparent 66.9%),linear-gradient(to bottom,transparent 33.1%,#fff5 33.3%,transparent 33.6%,transparent 66.4%,#fff5 66.6%,transparent 66.9%);box-shadow:inset 0 0 0 2px #fff8}
+.cover-hint{margin:0!important;text-align:center!important;color:#d8c6a7!important;font-size:12px!important}
+.cover-zoom-label{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;align-items:center!important;gap:12px!important;margin:0!important;font-size:13px!important}
+.cover-zoom-label input{width:100%!important;min-width:0!important;margin:0!important;accent-color:#e5b766!important}
+#coverEditor input[type=hidden]{display:none!important}
+@media(max-width:560px){
+ #wishlistDialog{padding:0!important}
+ #wishlistDialog .modal{width:min(100vw - 24px,520px)!important;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 28px)!important;overflow-y:auto!important;padding:18px 16px 14px!important}
+ #coverPreviewFrame.cover-preview{aspect-ratio:16/7!important;max-height:135px!important}
+ #coverEditor.cover-editor{padding:9px!important;gap:7px!important}
+ #wishlistForm .modal-actions{position:sticky!important;bottom:-14px!important;z-index:5!important;background:linear-gradient(180deg,#202326ee,#202326 35%)!important;padding:12px 0 4px!important;margin-top:8px!important}
+}
