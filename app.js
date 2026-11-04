@@ -36,7 +36,7 @@ async function persistCloud(){
 async function unlockPrivateChest(listId){
   const pin=window.prompt('Este baú é privado. Digite sua senha de acesso (mínimo de 16 caracteres):');
   if(pin===null)return false;
-  if(!/^\d{4}$/.test(pin)){toast('Digite um PIN de 4 dígitos.');return false;}
+  if(pin.length<16||pin.length>128){toast('A senha precisa ter entre 16 e 128 caracteres.');return false;}
   try{
     const result=await secureApi('unlock',{},pin);
     data=normalize(result.payload||defaults);privateAccessPin=pin;unlockedPrivateLists.add(listId);
