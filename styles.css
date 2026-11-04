@@ -348,3 +348,9 @@ dialog .modal{
 /* Hard cap for the crop viewport on iOS Safari/PWA */
 #coverPreviewFrame.cover-preview{height:clamp(130px,32vw,190px)!important;min-height:130px!important;max-height:190px!important;aspect-ratio:auto!important;overflow:hidden!important;flex:none!important}
 #coverPreviewFrame #coverPreview{height:100%!important;width:100%!important;max-height:none!important;max-width:none!important;object-fit:cover!important}
+
+/* Slightly taller treasure-chest covers for clearer artwork */
+.list-cover{height:clamp(165px,18vw,235px)}
+@media(max-width:560px){
+ .list-cover{height:auto;aspect-ratio:16/6.5;min-height:160px;max-height:225px}
+}
