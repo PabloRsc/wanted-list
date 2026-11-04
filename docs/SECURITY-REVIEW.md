@@ -43,3 +43,14 @@ Não aplicar uma migração SQL genérica sem conferir o esquema real. Os nomes 
 - A Edge Function ainda precisa ser atualizada para chamar as RPCs; até isso acontecer, a migração sozinha não altera o comportamento do endpoint.
 - Proteções de concorrência no salvamento do estado ainda não implementadas.
 - Não foi possível verificar o deploy do Cloudflare Pages nem executar testes contra o projeto Supabase nesta etapa.
+
+## Atualização — 2026-11-04
+
+Foram adicionadas duas migrações complementares:
+
+- `supabase-hardening-rpc.sql`: tentativas de PIN serializadas por advisory lock, limite de oito em quinze minutos e limpeza de tentativas antigas.
+- `supabase-state-save-rpc.sql`: gravação transacional do JSON, com lock e preservação de baús privados durante salvamentos públicos.
+
+Também foi criado `docs/SUPABASE-HARDENING-DEPLOY.md` com a ordem de publicação e as chamadas que a Edge Function deverá fazer.
+
+**Não marcar como concluído:** a Edge Function atual não está versionada no repositório e não pode ser substituída com segurança por uma versão reconstruída parcialmente. As migrações ainda não foram executadas no Supabase, a função ainda não foi publicada e não foram realizados testes no ambiente real. A proteção só estará ativa depois da integração e publicação coordenadas.
