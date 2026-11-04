@@ -18,13 +18,13 @@ function attr(tag, name) {
   const match = tag.match(new RegExp(name + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))", "i"));
   return decodeEntities(match ? (match[1] ?? match[2] ?? match[3] ?? "") : "");
 }
-function cleanText(value) { return decodeEntities(String(value || "").replace(/<[^>]*>/g, " ")).replace(/\\s+/g, " ").trim().slice(0, 300); }
+function cleanText(value) { return decodeEntities(String(value || "").replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim().slice(0, 300); }
 function absoluteImage(value, base) {
   if (!value) return "";
   try { const u = new URL(value, base); return ["https:", "http:"].includes(u.protocol) ? u.href : ""; } catch { return ""; }
 }
 function meta(html, key) {
-  const tags = html.match(/<meta\\b[^>]*>/gi) || [];
+  const tags = html.match(/<meta\b[^>]*>/gi) || [];
   for (const tag of tags) {
     const k = attr(tag, "property") || attr(tag, "name") || attr(tag, "itemprop");
     if (k.toLowerCase() === key.toLowerCase()) return attr(tag, "content");
@@ -42,9 +42,9 @@ function productFromJson(value) {
   return null;
 }
 function structuredProduct(html) {
-  const scripts = html.match(/<script\\b[^>]*type\\s*=\\s*["']application\\/ld\\+json["'][^>]*>[\\s\\S]*?<\\/script>/gi) || [];
+  const scripts = html.match(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi) || [];
   for (const script of scripts) {
-    const raw = script.replace(/^<[\\s\\S]*?>|<\\/script>$/gi, "");
+    const raw = script.replace(/^<[\s\S]*?>|<\/script>$/gi, "");
     try { const p = productFromJson(JSON.parse(raw)); if (p) return p; } catch {}
   }
   return null;
@@ -105,7 +105,7 @@ export async function onRequestPost({ request }) {
     html = new TextDecoder().decode(bytes);
     const product = structuredProduct(html);
     let title = cleanText(product?.name) || cleanText(meta(html, "og:title")) || cleanText(meta(html, "twitter:title"));
-    if (!title) { const match = html.match(/<title\\b[^>]*>([\\s\\S]*?)<\\/title>/i); title = cleanText(match?.[1]); }
+    if (!title) { const match = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i); title = cleanText(match?.[1]); }
     let imageValue = product?.image;
     if (Array.isArray(imageValue)) imageValue = imageValue[0]?.url || imageValue[0];
     if (imageValue && typeof imageValue === "object") imageValue = imageValue.url || imageValue.contentUrl;
