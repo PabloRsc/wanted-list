@@ -54,3 +54,12 @@ Foram adicionadas duas migrações complementares:
 Também foi criado `docs/SUPABASE-HARDENING-DEPLOY.md` com a ordem de publicação e as chamadas que a Edge Function deverá fazer.
 
 **Não marcar como concluído:** a Edge Function atual não está versionada no repositório e não pode ser substituída com segurança por uma versão reconstruída parcialmente. As migrações ainda não foram executadas no Supabase, a função ainda não foi publicada e não foram realizados testes no ambiente real. A proteção só estará ativa depois da integração e publicação coordenadas.
+
+
+## Atualização — Edge Function revisada e versionada
+
+Em 2026-11-04 foi adicionada a implementação revisada em `supabase/functions/wanted-list-secure/index.ts`. O frontend foi atualizado para pedir uma senha de 16 a 128 caracteres e autenticar a criação do primeiro baú privado. A RPC de estado também foi ajustada para impedir que um visitante sem senha reivindique o primeiro baú privado.
+
+A função chama as RPCs de rate limit e salvamento transacional, valida o payload e limita o corpo durante a leitura do stream. A ordem de implantação está em `docs/SUPABASE-HARDENING-DEPLOY.md`.
+
+**Ainda não implantado/verificado no Supabase:** as migrações SQL não foram executadas, o secret `PRIVATE_CHEST_PIN` não foi alterado, a Edge Function não foi publicada e os testes de integração não foram executados. Portanto, esta revisão de código não equivale à ativação da proteção em produção.
