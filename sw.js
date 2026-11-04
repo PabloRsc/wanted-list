@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wanted-list-pwa-chest-context-v1';
+const CACHE_NAME = 'wanted-list-pwa-cloudfix1';
 const APP_SHELL = [
   './',
   './index.html',
