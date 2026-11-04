@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const KEY='wanted-list-cloud-v1', SCHEMA_VERSION=2;
 const defaults={schemaVersion:SCHEMA_VERSION,lists:[],products:[],history:[]};
-let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50;
+let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50,coverZoom=1;
 let remoteSaveTimer=null, remoteReady=false, remoteSaving=false;
 const unlockedPrivateLists=new Set();
 let privateAccessPin='';
@@ -132,7 +132,7 @@ function readImage(file,cb){
   reader.onerror=()=>toast('Falha ao carregar a imagem.');reader.readAsDataURL(file)
 }
 function openWishlist(list=null){
-  editingListId=list?.id||null;pendingListImage='';clearListImage=false;$('#wishlistForm').reset();coverX=list?.coverX??50;coverY=list?.coverY??50;$('#coverX').value=coverX;$('#coverY').value=coverY;updateCoverPreview(list?.image||'');
+  editingListId=list?.id||null;pendingListImage='';clearListImage=false;$('#wishlistForm').reset();coverX=list?.coverX??50;coverY=list?.coverY??50;coverZoom=list?.coverZoom??1;$('#coverX').value=coverX;$('#coverY').value=coverY;$('#coverZoom').value=Math.round(coverZoom*100);updateCoverPreview(list?.image||'');
   selectedCover=list?.cover||'🏴‍☠️';$$('.cover-choice').forEach(b=>b.classList.toggle('selected',b.dataset.cover===selectedCover));
   $('#listName').value=list?.name||'';$('#listDesc').value=list?.desc||'';
   $('#listPrivate').checked=list?.isPrivate===true;
@@ -143,22 +143,22 @@ function openWishlist(list=null){
 }
 if($('#newWishlist'))$('#newWishlist').onclick=()=>openWishlist();if($('#newWishlistTop'))$('#newWishlistTop').onclick=()=>openWishlist();if($('#dashboardNewList'))$('#dashboardNewList').onclick=()=>openWishlist();if($('#dashboardNewProduct'))$('#dashboardNewProduct').onclick=()=>openProduct();
 $$('.cover-choice').forEach(b=>b.onclick=()=>{selectedCover=b.dataset.cover;clearListImage=true;$$('.cover-choice').forEach(x=>x.classList.toggle('selected',x===b))});
-function updateCoverPreview(src){const editor=$('#coverEditor'),img=$('#coverPreview'),toggle=$('#toggleCoverAdjust');if(!editor||!img)return;const value=src||pendingListImage;editor.classList.toggle('has-image',!!value);toggle.hidden=!value;if(!value){editor.classList.remove('is-open');toggle.textContent='Ajustar enquadramento';img.removeAttribute('src')}else{img.src=value;img.style.objectPosition=`${coverX}% ${coverY}%`}}
-function applyCoverPosition(){const img=$('#coverPreview');img.style.objectPosition=coverX+'% '+coverY+'%';$('#coverX').value=coverX;$('#coverY').value=coverY}
-['coverX','coverY'].forEach(id=>$('#'+id).addEventListener('input',()=>{coverX=Number($('#coverX').value);coverY=Number($('#coverY').value);applyCoverPosition()}));
+function updateCoverPreview(src){const editor=$('#coverEditor'),img=$('#coverPreview'),toggle=$('#toggleCoverAdjust');if(!editor||!img)return;const value=src||pendingListImage;editor.classList.toggle('has-image',!!value);toggle.hidden=!value;editor.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');if(!value){toggle.querySelector('.cover-chevron').textContent='⌄';img.removeAttribute('src')}else{img.src=value;applyCoverPosition()}}
+function applyCoverPosition(){const img=$('#coverPreview');img.style.objectPosition=coverX+'% '+coverY+'%';img.style.transform='scale('+coverZoom+')';$('#coverX').value=coverX;$('#coverY').value=coverY;$('#coverZoom').value=Math.round(coverZoom*100)}
+$('#coverX').addEventListener('input',()=>{coverX=Number($('#coverX').value);applyCoverPosition()});$('#coverY').addEventListener('input',()=>{coverY=Number($('#coverY').value);applyCoverPosition()});$('#coverZoom').addEventListener('input',()=>{coverZoom=Number($('#coverZoom').value)/100;applyCoverPosition()});
 let coverPointer=null;const coverFrame=$('#coverPreviewFrame');
 coverFrame.addEventListener('pointerdown',e=>{if(!$('#coverPreview').src)return;coverPointer={x:e.clientX,y:e.clientY};coverFrame.setPointerCapture(e.pointerId);coverFrame.classList.add('is-dragging');e.preventDefault()});
 coverFrame.addEventListener('pointermove',e=>{if(!coverPointer)return;const rect=coverFrame.getBoundingClientRect();coverX=Math.max(0,Math.min(100,coverX-(e.clientX-coverPointer.x)/rect.width*100));coverY=Math.max(0,Math.min(100,coverY-(e.clientY-coverPointer.y)/rect.height*100));coverPointer={x:e.clientX,y:e.clientY};applyCoverPosition()});
 const stopCoverPointer=()=>{coverPointer=null;coverFrame.classList.remove('is-dragging')};coverFrame.addEventListener('pointerup',stopCoverPointer);coverFrame.addEventListener('pointercancel',stopCoverPointer);
-$('#toggleCoverAdjust').onclick=()=>{const editor=$('#coverEditor'),open=editor.classList.toggle('is-open');$('#toggleCoverAdjust').textContent=open?'Fechar ajuste':'Ajustar enquadramento'};
+$('#toggleCoverAdjust').onclick=()=>{const editor=$('#coverEditor'),open=editor.classList.toggle('is-open');$('#toggleCoverAdjust').setAttribute('aria-expanded',String(open));$('#toggleCoverAdjust .cover-chevron').textContent=open?'⌃':'⌄'};
 $('#listImage').onchange=e=>readImage(e.target.files[0],v=>{pendingListImage=v;clearListImage=false;updateCoverPreview(v)});
 $('#wishlistForm').onsubmit=e=>{
   e.preventDefault();
   const name=$('#listName').value.trim();if(!name){toast('Informe o nome do baú.');return}
   const existing=data.lists.find(l=>l.id===editingListId);
   const isPrivate=$('#listPrivate').checked;
-  if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,isPrivate});
-  else data.lists.push({id:id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,isPrivate,created:new Date().toISOString()});
+  if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,coverZoom,isPrivate});
+  else data.lists.push({id:id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,coverZoom,isPrivate,created:new Date().toISOString()});
   $('#wishlistDialog').close();if(save())toast(existing?'Baú atualizado!':'Novo baú criado!')
 };
 function deleteWishlist(listId){
