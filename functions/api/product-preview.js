@@ -6,8 +6,12 @@ function validPublicUrl(value) {
   try { url = new URL(value); } catch { throw new Error("LINK_INVALIDO"); }
   if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || (url.port && !["80", "443"].includes(url.port))) throw new Error("LINK_INVALIDO");
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
-  if (!host || host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") || host.endsWith(".internal")) throw new Error("DESTINO_NAO_PERMITIDO");
-  if (/^(127\.|10\.|192\.168\.|169\.254\.|0\.)/.test(host) || /^172\.(1[6-9]|2\d|3[01])\./.test(host) || host === "::1" || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80:")) throw new Error("DESTINO_NAO_PERMITIDO");
+  // The importer only needs public storefront hostnames, never raw IP addresses.
+  if (!host || host.includes(":") || /^\d+(?:\.\d+){0,3}$/.test(host) ||
+      host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") ||
+      host.endsWith(".internal") || !host.includes(".")) {
+    throw new Error("DESTINO_NAO_PERMITIDO");
+  }
   return url;
 }
 
@@ -111,25 +115,33 @@ export async function onRequestPost({ request }) {
   const cors = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
   const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: cors });
   try {
-    const body = await request.json();
+    const contentLength = Number(request.headers.get("content-length") || 0);
+    if (contentLength > 4096) return reply(413, { error: "Requisição muito grande." });
+    const rawBody = await request.text();
+    if (rawBody.length > 4096) return reply(413, { error: "Requisição muito grande." });
+    let body;
+    try { body = JSON.parse(rawBody); } catch { return reply(400, { error: "Requisição inválida." }); }
     const input = String(body?.url || "").trim();
     if (!input || input.length > 2048) return reply(400, { error: "Informe um link válido." });
     let target = validPublicUrl(input);
     let response, html;
-    for (let attempt = 0; attempt < 4; attempt++) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-      try {
-        response = await fetch(target.href, { headers: { "user-agent": "Mozilla/5.0 (compatible; WantedListProductImporter/1.0)", "accept": "text/html,application/xhtml+xml" }, redirect: "manual", signal: controller.signal });
-      } finally { clearTimeout(timer); }
-      if ([301, 302, 303, 307, 308].includes(response.status)) {
-        const location = response.headers.get("location");
-        if (!location || attempt === 3) return reply(422, { error: "A loja redirecionou muitas vezes. Abra o anúncio e tente novamente." });
-        target = validPublicUrl(new URL(location, target).href);
-        continue;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    try {
+      for (let attempt = 0; attempt < 4; attempt++) {
+        response = await fetch(target.href, {
+          headers: { "user-agent": "Mozilla/5.0 (compatible; WantedListProductImporter/1.0)", "accept": "text/html,application/xhtml+xml" },
+          redirect: "manual",
+          signal: controller.signal
+        });
+        if ([301, 302, 303, 307, 308].includes(response.status)) {
+          const location = response.headers.get("location");
+          if (!location || attempt === 3) return reply(422, { error: "A loja redirecionou muitas vezes. Abra o anúncio e tente novamente." });
+          target = validPublicUrl(new URL(location, target).href);
+          continue;
+        }
+        break;
       }
-      break;
-    }
     if (!response?.ok) return reply(422, { error: "Não foi possível acessar esse anúncio. A loja pode bloquear consultas automáticas." });
     const type = response.headers.get("content-type") || "";
     if (!type.includes("text/html") && !type.includes("application/xhtml")) return reply(422, { error: "O link não parece ser uma página de produto." });
@@ -156,6 +168,9 @@ export async function onRequestPost({ request }) {
     const price = priceFromProduct(product) || meta(html, "product:price:amount") || meta(html, "og:price:amount") || (/(^|\.)amazon\./i.test(target.hostname) ? amazonPrice(html) : "");
     const numericPrice = parsePrice(price);
     return reply(200, { title, image, price: numericPrice, currency: product?.offers?.priceCurrency || meta(html, "product:price:currency") || meta(html, "og:price:currency") || "", store: storeName(target, html), url: target.href, found: Boolean(title || image || price) });
+    } finally {
+      clearTimeout(timer);
+    }
   } catch (error) {
     if (error?.name === "AbortError") return reply(504, { error: "A loja demorou demais para responder. Tente novamente." });
     const message = String(error?.message || "");
