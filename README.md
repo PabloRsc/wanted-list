@@ -1,32 +1,36 @@
-# Wanted List — Protótipo funcional 1.1
+# Wanted List — Diário de Tesouros
 
-## Como executar
-1. Extraia todo o conteúdo do ZIP para uma pasta.
-2. Abra `index.html` no Chrome, Edge ou Opera.
-3. Os dados ficam neste navegador e neste dispositivo.
+Aplicativo web instalável (PWA) para organizar desejos e coleções com tema One Piece.
 
-## Funcionalidades incluídas
-- Navegação entre Início, Produtos, Wishlists, Tesouros conquistados, Resumo e Configurações.
-- Criar, editar e excluir wishlists.
-- Ao excluir uma wishlist, os produtos são preservados e apenas perdem o vínculo com ela.
-- Cadastro, edição e exclusão de produtos.
-- Associação de um produto a várias wishlists.
-- Status Desejado, Comprado e Desistido.
-- Registro de preço inicial e histórico de alterações de preço.
-- Registro opcional de preço pago e data da compra.
-- Avaliação ilustrativa e comentário após marcar como Comprado.
-- Busca por nome/loja, filtro por status/lista e ordenação.
-- Resumo separado de desejos, compras e desistências.
-- Exportação e importação JSON com validação e confirmação.
-- Redimensionamento/compressão das imagens enviadas para reduzir consumo de armazenamento.
-- Tratamento de falha de armazenamento local.
+## Acesso
+- Produção: https://wanted-list.pages.dev
+- Hospedagem: Cloudflare Pages, publicação automática a partir da branch `main`.
+- Dados: Supabase por meio da Edge Function `wanted-list-secure`.
 
-## Limitações conhecidas
-- O armazenamento continua sendo `localStorage`: não sincroniza entre PC e celular.
-- Não existe backup automático em nuvem nesta versão.
-- O histórico de preços registra os valores informados manualmente; não consulta preços das lojas automaticamente.
-- Abrir o arquivo diretamente (`file://`) pode ter limitações específicas de navegador. Para uso mais consistente, execute em servidor local simples.
-- O valor é exibido em Berries como convenção temática; não há conversão cambial.
+## Desenvolvimento e publicação
+Este é um site estático. O Cloudflare Pages usa:
+- Framework preset: None
+- Build command: vazio
+- Build output directory: `.`
+- Branch de produção: `main`
 
-## Próxima etapa
-Testar os fluxos no navegador, corrigir eventuais falhas encontradas e só depois planejar banco de dados, sincronização e hospedagem. O visual foi mantido deliberadamente próximo ao primeiro protótipo.
+Cada commit na branch `main` dispara uma nova publicação. O service worker mantém cache apenas dos arquivos estáticos do aplicativo; chamadas de API e gravações não são interceptadas.
+
+## Segurança e dados
+- O navegador usa apenas a chave publicável do Supabase, nunca a chave `service_role`.
+- Leitura e gravação passam pela Edge Function `wanted-list-secure`.
+- As tabelas de estado e tentativas de PIN usam RLS sem políticas públicas.
+- O PIN dos baús é compartilhado pela função e não representa autenticação individual. Qualquer pessoa que conheça o PIN pode desbloquear os baús privados.
+- Não adicione segredos, tokens ou credenciais administrativas a este repositório.
+
+## Funcionalidades
+- Baús públicos e privados, catálogo de produtos e status Desejado/Comprado/Desistido.
+- Histórico de preços, avaliações, resumo e backup JSON.
+- Ícones personalizados e instalação PWA em dispositivos compatíveis.
+- Sincronização em nuvem via Edge Function.
+
+## Observações
+- A sincronização requer conexão com a internet.
+- O cache offline serve os arquivos do app, não permite garantir gravações offline.
+- Faça exportações periódicas de backup em Configurações.
+- Preços são informados manualmente; não há consulta automática às lojas.
