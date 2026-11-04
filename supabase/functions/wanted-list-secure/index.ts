@@ -149,12 +149,34 @@ function validateState(value: unknown): State | null {
 async function readLimitedJson(req: Request): Promise<unknown> {
   const declared = Number(req.headers.get("content-length") || 0);
   if (declared > MAX_BODY_BYTES) throw new Response("PAYLOAD_TOO_LARGE", { status: 413, headers: cors });
-  const raw = await req.text();
-  if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
-    throw new Response("PAYLOAD_TOO_LARGE", { status: 413, headers: cors });
+  if (!req.body) throw new Response("INVALID_JSON", { status: 400, headers: cors });
+
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_BODY_BYTES) {
+        await reader.cancel();
+        throw new Response("PAYLOAD_TOO_LARGE", { status: 413, headers: cors });
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
   }
   try {
-    return JSON.parse(raw);
+    return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
   } catch {
     throw new Response("INVALID_JSON", { status: 400, headers: cors });
   }
