@@ -55,9 +55,16 @@ begin
         where linked.list_id = any(v_private_ids)
      );
 
-    -- Se ainda não existem baús privados, mantém a compatibilidade com
-    -- a criação inicial do primeiro baú privado pelo fluxo atual.
+    -- A primeira criação de baú privado também exige PIN. Isso impede que
+    -- um visitante anônimo reivindique o primeiro baú e bloqueie o dono.
     if coalesce(array_length(v_private_ids,1),0) = 0 then
+      if exists (
+        select 1
+          from jsonb_array_elements(coalesce(p_incoming->'lists','[]'::jsonb)) x
+         where x->>'isPrivate' = 'true'
+      ) then
+        raise exception 'private chest creation requires authentication';
+      end if;
       v_result := p_incoming;
     else
       select coalesce(jsonb_agg(x), '[]'::jsonb)
