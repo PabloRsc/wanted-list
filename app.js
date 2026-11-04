@@ -33,7 +33,7 @@ async function persistCloud(){
     toast(err.message||'Falha ao salvar na nuvem.');
   }finally{remoteSaving=false}
 }
-async async function unlockPrivateChest(listId){
+async function unlockPrivateChest(listId){
   const pin=window.prompt('Este baú é privado. Digite o PIN de 4 dígitos para acessar:');
   if(pin===null)return false;
   if(!/^\d{4}$/.test(pin)){toast('Digite um PIN de 4 dígitos.');return false;}
