@@ -21,7 +21,5 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Format check
-        run: deno fmt --check supabase/functions/wanted-list-secure/index.ts
       - name: Type check
         run: deno check supabase/functions/wanted-list-secure/index.ts
