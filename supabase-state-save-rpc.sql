@@ -66,6 +66,7 @@ begin
           select x
             from jsonb_array_elements(coalesce(p_incoming->'lists','[]'::jsonb)) x
            where coalesce(x->>'isPrivate','false') <> 'true'
+             and not ((x->>'id') = any(v_private_ids))
           union all
           select x
             from jsonb_array_elements(coalesce(v_current->'lists','[]'::jsonb)) x
@@ -77,11 +78,12 @@ begin
         from (
           select x
             from jsonb_array_elements(coalesce(p_incoming->'products','[]'::jsonb)) x
-           where not exists (
-             select 1
-               from jsonb_array_elements_text(coalesce(x->'lists','[]'::jsonb)) linked(list_id)
-              where linked.list_id = any(v_private_ids)
-           )
+           where not ((x->>'id') = any(v_private_product_ids))
+             and not exists (
+               select 1
+                 from jsonb_array_elements_text(coalesce(x->'lists','[]'::jsonb)) linked(list_id)
+                where linked.list_id = any(v_private_ids)
+             )
           union all
           select x
             from jsonb_array_elements(coalesce(v_current->'products','[]'::jsonb)) x
