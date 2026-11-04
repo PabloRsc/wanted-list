@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wanted-list-pwa-security2';
+const CACHE_NAME = 'wanted-list-pwa-security3';
 const APP_SHELL = [
   './',
   './index.html',
