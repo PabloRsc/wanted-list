@@ -158,17 +158,17 @@ $('#wishlistForm').onsubmit=async e=>{
   const name=$('#listName').value.trim();if(!name){toast('Informe o nome do baú.');return}
   const wasEditing=Boolean(editingListId);
   const editingId=editingListId;
+  const newListId=editingId||id();
   let existing=data.lists.find(l=>l.id===editingId);
   const isPrivate=$('#listPrivate').checked;
   // Creating the first private chest (or converting a public one) must be
   // authenticated too; otherwise an anonymous save could claim the first lock.
   if(isPrivate&&(!existing||existing.isPrivate!==true)&&!privateAccessPin){
-    const accessId=editingId||id();
-    if(!(await unlockPrivateChest(accessId)))return;
+    if(!(await unlockPrivateChest(newListId)))return;
     existing=data.lists.find(l=>l.id===editingId);
   }
   if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,coverZoom,isPrivate});
-  else data.lists.push({id:editingId||id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,coverZoom,isPrivate,created:new Date().toISOString()});
+  else data.lists.push({id:newListId,name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,coverZoom,isPrivate,created:new Date().toISOString()});
   $('#wishlistDialog').close();if(save())toast(wasEditing?'Baú atualizado!':'Novo baú criado!')
 };
 function deleteWishlist(listId){
