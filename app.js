@@ -144,7 +144,12 @@ function openWishlist(list=null){
 if($('#newWishlist'))$('#newWishlist').onclick=()=>openWishlist();if($('#newWishlistTop'))$('#newWishlistTop').onclick=()=>openWishlist();if($('#dashboardNewList'))$('#dashboardNewList').onclick=()=>openWishlist();if($('#dashboardNewProduct'))$('#dashboardNewProduct').onclick=()=>openProduct();
 $$('.cover-choice').forEach(b=>b.onclick=()=>{selectedCover=b.dataset.cover;clearListImage=true;$$('.cover-choice').forEach(x=>x.classList.toggle('selected',x===b))});
 function updateCoverPreview(src){const editor=$('#coverEditor'),img=$('#coverPreview'),toggle=$('#toggleCoverAdjust');if(!editor||!img)return;const value=src||pendingListImage;editor.classList.toggle('has-image',!!value);toggle.hidden=!value;if(!value){editor.classList.remove('is-open');toggle.textContent='Ajustar enquadramento';img.removeAttribute('src')}else{img.src=value;img.style.objectPosition=`${coverX}% ${coverY}%`}}
-['coverX','coverY'].forEach(id=>$('#'+id).addEventListener('input',()=>{coverX=Number($('#coverX').value);coverY=Number($('#coverY').value);if($('#coverPreview').src)$('#coverPreview').style.objectPosition=`${coverX}% ${coverY}%`}));
+function applyCoverPosition(){const img=$('#coverPreview');img.style.objectPosition=coverX+'% '+coverY+'%';$('#coverX').value=coverX;$('#coverY').value=coverY}
+['coverX','coverY'].forEach(id=>$('#'+id).addEventListener('input',()=>{coverX=Number($('#coverX').value);coverY=Number($('#coverY').value);applyCoverPosition()}));
+let coverPointer=null;const coverFrame=$('#coverPreviewFrame');
+coverFrame.addEventListener('pointerdown',e=>{if(!$('#coverPreview').src)return;coverPointer={x:e.clientX,y:e.clientY};coverFrame.setPointerCapture(e.pointerId);coverFrame.classList.add('is-dragging');e.preventDefault()});
+coverFrame.addEventListener('pointermove',e=>{if(!coverPointer)return;const rect=coverFrame.getBoundingClientRect();coverX=Math.max(0,Math.min(100,coverX-(e.clientX-coverPointer.x)/rect.width*100));coverY=Math.max(0,Math.min(100,coverY-(e.clientY-coverPointer.y)/rect.height*100));coverPointer={x:e.clientX,y:e.clientY};applyCoverPosition()});
+const stopCoverPointer=()=>{coverPointer=null;coverFrame.classList.remove('is-dragging')};coverFrame.addEventListener('pointerup',stopCoverPointer);coverFrame.addEventListener('pointercancel',stopCoverPointer);
 $('#toggleCoverAdjust').onclick=()=>{const editor=$('#coverEditor'),open=editor.classList.toggle('is-open');$('#toggleCoverAdjust').textContent=open?'Fechar ajuste':'Ajustar enquadramento'};
 $('#listImage').onchange=e=>readImage(e.target.files[0],v=>{pendingListImage=v;clearListImage=false;updateCoverPreview(v)});
 $('#wishlistForm').onsubmit=e=>{
