@@ -73,7 +73,8 @@ function publicSnapshot(state){
   const productIds=new Set(products.map(p=>String(p.id)));
   return {
     schemaVersion:SCHEMA_VERSION,
-    lists:(state.lists||[]).map(l=>({...l})),
+    // Do not persist private chest metadata in the browser's public/offline cache.
+    lists:(state.lists||[]).filter(l=>l.isPrivate!==true).map(l=>({...l})),
     products,
     history:(state.history||[]).filter(h=>productIds.has(String(h.productId)))
   };
