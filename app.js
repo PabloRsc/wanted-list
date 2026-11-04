@@ -153,14 +153,23 @@ coverFrame.addEventListener('pointermove',e=>{if(!coverPointer)return;const rect
 const stopCoverPointer=()=>{coverPointer=null;coverFrame.classList.remove('is-dragging')};coverFrame.addEventListener('pointerup',stopCoverPointer);coverFrame.addEventListener('pointercancel',stopCoverPointer);
 $('#toggleCoverAdjust').onclick=()=>{const editor=$('#coverEditor'),open=editor.classList.toggle('is-open');$('#toggleCoverAdjust').setAttribute('aria-expanded',String(open));$('#toggleCoverAdjust .cover-chevron').textContent=open?'⌃':'⌄'};
 $('#listImage').onchange=e=>readImage(e.target.files[0],v=>{pendingListImage=v;clearListImage=false;updateCoverPreview(v)});
-$('#wishlistForm').onsubmit=e=>{
+$('#wishlistForm').onsubmit=async e=>{
   e.preventDefault();
   const name=$('#listName').value.trim();if(!name){toast('Informe o nome do baú.');return}
-  const existing=data.lists.find(l=>l.id===editingListId);
+  const wasEditing=Boolean(editingListId);
+  const editingId=editingListId;
+  let existing=data.lists.find(l=>l.id===editingId);
   const isPrivate=$('#listPrivate').checked;
+  // Creating the first private chest (or converting a public one) must be
+  // authenticated too; otherwise an anonymous save could claim the first lock.
+  if(isPrivate&&(!existing||existing.isPrivate!==true)&&!privateAccessPin){
+    const accessId=editingId||id();
+    if(!(await unlockPrivateChest(accessId)))return;
+    existing=data.lists.find(l=>l.id===editingId);
+  }
   if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,coverZoom,isPrivate});
-  else data.lists.push({id:id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,coverZoom,isPrivate,created:new Date().toISOString()});
-  $('#wishlistDialog').close();if(save())toast(existing?'Baú atualizado!':'Novo baú criado!')
+  else data.lists.push({id:editingId||id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,coverZoom,isPrivate,created:new Date().toISOString()});
+  $('#wishlistDialog').close();if(save())toast(wasEditing?'Baú atualizado!':'Novo baú criado!')
 };
 function deleteWishlist(listId){
   const list=data.lists.find(l=>l.id===listId);if(!list)return;
