@@ -11,12 +11,12 @@ function cloudHeaders(extra={}){return {'apikey':cloudConfig.key,'Authorization'
 async function secureApi(action,payload={},pin=''){
   if(!cloudConfig.url||!cloudConfig.key)throw new Error('Configuração Supabase ausente');
   const base=cloudConfig.url.replace(/\/$/,'');
-  const response=await fetch(base+'/functions/v1/wanted-list-secure',{method:'POST',headers:cloudHeaders(),body:JSON.stringify({action,payload,pin})});
+  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);let response;try{response=await fetch(base+'/functions/v1/wanted-list-secure',{method:'POST',headers:cloudHeaders(),body:JSON.stringify({action,payload,pin}),cache:'no-store',signal:controller.signal})}catch(error){if(error.name==='AbortError')throw new Error('TEMPO_ESGOTADO: o Supabase não respondeu em 15 segundos.');throw new Error('REDE: '+(error.message||'falha ao acessar o Supabase'))}finally{clearTimeout(timeout)}
   const body=await response.text();let parsed={};try{parsed=body?JSON.parse(body):{}}catch{}
   if(!response.ok)throw new Error(parsed.error||('Função segura '+response.status));
   return parsed;
 }
-async function loadCloud(){try{setCloudStatus('CONECTANDO…');const result=await secureApi('load');data=normalize(result.payload||defaults);lastPersistedSnapshot=JSON.stringify(data);localStorage.setItem(KEY,JSON.stringify(publicSnapshot(data)));remoteReady=true;setCloudStatus('ONLINE · NUVEM',true);render();go('wishlists')}catch(err){console.error('Falha ao carregar Supabase:',err);const cached=localStorage.getItem(KEY);if(cached){try{data=normalize(JSON.parse(cached))}catch{data=clone(defaults)}}else data=clone(defaults);setCloudStatus('ERRO DE CONEXÃO');render();go('wishlists');toast('Não foi possível conectar ao serviço seguro. Verifique se a função foi publicada no Supabase.')}}
+async function loadCloud(){try{setCloudStatus('CONECTANDO…');const result=await secureApi('load');data=normalize(result.payload||defaults);lastPersistedSnapshot=JSON.stringify(data);localStorage.setItem(KEY,JSON.stringify(publicSnapshot(data)));remoteReady=true;setCloudStatus('ONLINE · NUVEM',true);render();go('wishlists')}catch(err){console.error('Falha ao carregar Supabase:',err);const cached=localStorage.getItem(KEY);if(cached){try{data=normalize(JSON.parse(cached))}catch{data=clone(defaults)}}else data=clone(defaults);setCloudStatus('ERRO DE CONEXÃO');render();go('wishlists');toast(err.message||'Não foi possível conectar ao serviço seguro.')}}
 async function persistCloud(){
   if(!cloudConfig.url||!cloudConfig.key||!remoteReady)return;
   if(remoteSaving){scheduleCloudSave();return;}
