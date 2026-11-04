@@ -1,39 +1,54 @@
 # Implantação coordenada — segurança dos baús
 
-Os arquivos SQL desta pasta/repositório são preparação, não uma implantação automática.
+Os arquivos deste repositório preparam a correção, mas não alteram automaticamente o projeto Supabase.
 
 ## Arquivos
 
-- `supabase-hardening-rpc.sql`: cria RPCs para contabilização serializada de tentativas de PIN e limpeza após autenticação.
-- `supabase-state-save-rpc.sql`: cria RPC de salvamento transacional que bloqueia o registro de estado e preserva baús privados em salvamentos públicos.
-- `supabase-secure-migration.sql`: revoga acesso direto de anon/authenticated à tabela de estado e configura a tabela de tentativas.
-
-## Dependências obrigatórias na Edge Function
-
-A função `wanted-list-secure` deve ser atualizada antes de executar o fluxo completo:
-
-1. Em `unlock`, chamar `wanted_list_register_pin_attempt(p_ip_key)` antes de validar o PIN. Se retornar `false`, responder com HTTP 429 sem validar.
-2. Se o PIN estiver incorreto, responder com erro genérico de autenticação. A tentativa já foi registrada atomicamente.
-3. Se o PIN estiver correto, chamar `wanted_list_clear_pin_attempts(p_ip_key)` e só então retornar o estado privado.
-4. Em `save`, validar o PIN no servidor quando houver solicitação de escrita privada. Chamar `wanted_list_save_state(payload, true)` somente após autenticação válida; sem PIN, chamar `wanted_list_save_state(payload, false)`.
-5. Remover da Edge Function o antigo ciclo de leitura/mesclagem/gravação e as consultas separadas à tabela de tentativas.
-6. Não confiar em `x-forwarded-for` enviado diretamente pelo cliente. O identificador de IP deve vir de um cabeçalho garantido pelo gateway Supabase ou de um proxy confiável. Se não houver fonte confiável, não fingir que o rate limit por IP é eficaz.
-7. Definir limites de tamanho do corpo HTTP e validação estrutural antes de chamar as RPCs. A RPC de estado rejeita payload acima de 5 MB e exige arrays `lists` e `products`.
+- `supabase-hardening-rpc.sql`: rate limit atômico de tentativas de senha.
+- `supabase-state-save-rpc.sql`: salvamento transacional e preservação de baús privados.
+- `supabase/functions/wanted-list-secure/index.ts`: Edge Function revisada.
+- `supabase-secure-migration.sql`: revoga acesso direto de anon/authenticated à tabela de estado.
 
 ## Ordem de publicação
 
-1. Fazer e guardar um backup JSON no app.
-2. Conferir que a tabela `wanted_list_state` contém a linha `id = 1` e coluna `payload jsonb`, conforme `supabase-setup.sql`.
-3. Executar `supabase-hardening-rpc.sql` e `supabase-state-save-rpc.sql` no SQL Editor.
-4. Publicar a Edge Function compatível.
-5. Executar `supabase-secure-migration.sql` para retirar o acesso direto de anon/authenticated à tabela. Faça isso somente quando a função segura estiver publicada e testada em ambiente de validação; executar antes pode interromper o app.
-6. Testar: load público; PIN incorreto; bloqueio após oito tentativas em quinze minutos; PIN correto; salvamento público sem perda de dados privados; salvamento privado autenticado; duas gravações simultâneas; payload excessivo; acesso direto negado a anon/authenticated.
+1. Fazer e guardar um backup JSON pelo app.
+2. No painel Supabase, atualizar o secret `PRIVATE_CHEST_PIN` para uma senha aleatória com pelo menos 16 caracteres (até 128). Não compartilhar esse valor e não colocá-lo no GitHub.
+3. Conferir que `wanted_list_state` contém a linha `id = 1` e a coluna `payload jsonb`, conforme `supabase-setup.sql`.
+4. Executar `supabase-hardening-rpc.sql` no SQL Editor.
+5. Executar `supabase-state-save-rpc.sql` no SQL Editor.
+6. Publicar exatamente `supabase/functions/wanted-list-secure/index.ts` como a Edge Function `wanted-list-secure`.
+7. Executar `supabase-secure-migration.sql` para revogar o acesso direto de anon/authenticated. Só fazer isso depois de a Edge Function nova estar publicada.
+8. Testar todos os cenários abaixo antes de considerar a segurança concluída.
 
-## Atenção
+## O que a Edge Function faz
 
-- Não colocar `SERVICE_ROLE_KEY` nem PIN em arquivos do GitHub, no frontend ou em mensagens.
-- O PIN atual de quatro dígitos continua fraco. A RPC reduz corrida no rate limit, mas não aumenta a entropia do PIN.
-- O SQL não substitui a Edge Function. Enquanto a função não chamar as RPCs, as novas garantias não estão ativas.
-- O código atual da Edge Function não está no repositório. Não publicar uma reimplementação aproximada: ela pode quebrar a preservação dos baús ou o formato de resposta esperado pelo app.
-- A RPC `wanted_list_save_state` pressupõe o modelo atual de uma única linha em `wanted_list_state`; revisar se o esquema real divergir.
-- O salvamento transacional preserva registros privados atuais, mas não substitui uma revisão de autenticação/autorização nem protege contra comprometimento da service role.
+- Usa RPCs para registrar tentativas de senha de forma serializada e limpar tentativas após autenticação válida.
+- Exige senha de pelo menos 16 caracteres no secret `PRIVATE_CHEST_PIN`.
+- Exige autenticação também para criar o primeiro baú privado ou converter um baú público em privado.
+- Usa RPC transacional para salvar estado, evitando read/merge/write concorrente.
+- Limita o corpo HTTP durante a leitura do stream a 5 MB.
+- Valida arrays, quantidade de registros, IDs duplicados e comprimentos de campos antes de persistir.
+- Responde com `Cache-Control: no-store`.
+
+## Testes necessários
+
+- `load` público sem conteúdo de produtos privados.
+- PIN/senha incorreta retorna 401.
+- Oito tentativas no intervalo de quinze minutos são limitadas; novas tentativas recebem 429.
+- Senha correta libera o estado privado.
+- Criar o primeiro baú privado exige senha.
+- Salvamento público não apaga nem altera listas, produtos ou histórico privados.
+- Salvamento privado autenticado permite editar conteúdo privado.
+- Duas gravações simultâneas não perdem dados privados.
+- Corpo acima de 5 MB ou estrutura inválida é rejeitado.
+- Acesso direto à tabela por anon/authenticated é negado após a migração.
+
+## Limites e cuidados
+
+- Não colocar `SERVICE_ROLE_KEY` nem senha em arquivos do GitHub, frontend ou mensagens.
+- O app mantém a senha privada apenas em memória durante a sessão; recarregar a página exigirá desbloquear novamente.
+- O endpoint é público. CORS não é autenticação.
+- O rate limit depende de um IP de origem confiável fornecido pelo gateway. Se o gateway não fornecer um cabeçalho confiável, o fallback usa um bucket compartilhado, limitando todos os clientes juntos em vez de confiar em um valor arbitrário do cliente.
+- Os cartões dos baús privados continuam visíveis publicamente por decisão de produto; nome, descrição, capa e identificador do baú não são secretos.
+- A migração SQL pressupõe o esquema atual de uma única linha em `wanted_list_state`. Não executar se o esquema real divergir.
+- A proteção não está ativa até executar as migrações, publicar a Edge Function e concluir os testes.
