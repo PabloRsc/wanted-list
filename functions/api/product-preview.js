@@ -58,6 +58,38 @@ function priceFromProduct(product) {
   const n = Number(String(price ?? "").replace(",", "."));
   return Number.isFinite(n) && n >= 0 ? n : "";
 }
+function amazonImage(html, base) {
+  const tags = html.match(/<img\b[^>]*>/gi) || [];
+  for (const tag of tags) {
+    if (!/(?:id\s*=\s*["']landingImage["']|data-a-image-name\s*=\s*["']landingImage["'])/i.test(tag)) continue;
+    for (const key of ["data-old-hires", "src"]) {
+      const value = attr(tag, key);
+      if (value && !value.startsWith("data:image")) return absoluteImage(value, base);
+    }
+    const dynamic = attr(tag, "data-a-dynamic-image");
+    if (dynamic) {
+      try { const images = JSON.parse(dynamic.replace(/&quot;/g, '"')); const first = Object.keys(images).sort((a,b)=>(images[b]?.[0]||0)-(images[a]?.[0]||0))[0]; if (first) return absoluteImage(first, base); } catch {}
+    }
+  }
+  return "";
+}
+function amazonPrice(html) {
+  const selectors = [
+    /<span[^>]*class=["'][^"']*a-price[^"']*["'][^>]*>[\s\S]*?<span[^>]*class=["'][^"']*a-offscreen[^"']*["'][^>]*>([\s\S]*?)<\/span>/i,
+    /["']priceToPay["'][\s\S]{0,500}?["']value["']\s*:\s*["']?([\d.,]+)/i,
+    /["']apexPriceToPay["'][\s\S]{0,500}?["']value["']\s*:\s*["']?([\d.,]+)/i
+  ];
+  for (const re of selectors) {
+    const m = html.match(re);
+    if (!m) continue;
+    const raw = cleanText(m[1]).replace(/[^\d,.-]/g, "");
+    if (!raw) continue;
+    const normalized = raw.includes(",") ? raw.replace(/\./g, "").replace(",", ".") : raw;
+    const n = Number(normalized);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return "";
+}
 function storeName(url, html) {
   const site = meta(html, "og:site_name");
   if (site) return cleanText(site);
@@ -109,8 +141,8 @@ export async function onRequestPost({ request }) {
     let imageValue = product?.image;
     if (Array.isArray(imageValue)) imageValue = imageValue[0]?.url || imageValue[0];
     if (imageValue && typeof imageValue === "object") imageValue = imageValue.url || imageValue.contentUrl;
-    const image = absoluteImage(imageValue, target) || absoluteImage(meta(html, "og:image"), target) || absoluteImage(meta(html, "twitter:image"), target);
-    const price = priceFromProduct(product) || meta(html, "product:price:amount") || meta(html, "og:price:amount") || "";
+    const image = absoluteImage(imageValue, target) || absoluteImage(meta(html, "og:image"), target) || absoluteImage(meta(html, "twitter:image"), target) || (/(^|\.)amazon\./i.test(target.hostname) ? amazonImage(html, target) : "");
+    const price = priceFromProduct(product) || meta(html, "product:price:amount") || meta(html, "og:price:amount") || (/(^|\.)amazon\./i.test(target.hostname) ? amazonPrice(html) : "");
     const numericPrice = Number(String(price).replace(",", "."));
     return reply(200, { title, image, price: Number.isFinite(numericPrice) && numericPrice >= 0 ? numericPrice : "", currency: product?.offers?.priceCurrency || product?.offers?.priceCurrency || meta(html, "product:price:currency") || "", store: storeName(target, html), url: target.href, found: Boolean(title || image || price) });
   } catch (error) {
