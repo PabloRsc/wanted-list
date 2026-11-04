@@ -73,13 +73,11 @@ async function readState(): Promise<State> {
 }
 
 function getClientKey(req: Request): string {
-  // Supabase/proxy must overwrite or append the final X-Forwarded-For value.
-  // If no trusted IP header exists, use one shared bucket (fail closed).
+  // Use only the Cloudflare client-IP header. Never fall back to
+  // X-Forwarded-For, which can contain client-supplied values.
+  // If the trusted gateway header is absent, use one shared bucket.
   const cfIp = req.headers.get("cf-connecting-ip")?.trim();
-  const forwarded = req.headers.get("x-forwarded-for");
-  const forwardedIp = forwarded?.split(",").map((v) => v.trim()).filter(Boolean).at(-1);
-  const candidate = cfIp || forwardedIp || "unknown";
-  return candidate.slice(0, 80) || "unknown";
+  return cfIp ? cfIp.slice(0, 80) : "unknown";
 }
 
 async function registerPinAttempt(ip: string): Promise<boolean> {
