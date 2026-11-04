@@ -49,14 +49,25 @@ function structuredProduct(html) {
   }
   return null;
 }
+function parsePrice(value) {
+  if (value === null || value === undefined || value === "") return "";
+  if (typeof value === "number") return Number.isFinite(value) && value >= 0 ? value : "";
+  let raw = String(value).trim().replace(/[^0-9,.-]/g, "");
+  if (!raw) return "";
+  const comma = raw.lastIndexOf(","), dot = raw.lastIndexOf(".");
+  if (comma > dot) raw = raw.replace(/\./g, "").replace(",", ".");
+  else if (dot > comma && comma >= 0) raw = raw.replace(/,/g, "");
+  else if (comma >= 0) raw = raw.replace(",", ".");
+  const number = Number(raw);
+  return Number.isFinite(number) && number >= 0 ? number : "";
+}
 function priceFromProduct(product) {
   if (!product) return "";
   let offers = product.offers;
   if (Array.isArray(offers)) offers = offers[0];
   if (offers && offers.offers) offers = Array.isArray(offers.offers) ? offers.offers[0] : offers.offers;
   const price = offers?.price ?? offers?.lowPrice ?? product.price;
-  const n = Number(String(price ?? "").replace(",", "."));
-  return Number.isFinite(n) && n >= 0 ? n : "";
+  return parsePrice(price);
 }
 function amazonImage(html, base) {
   const tags = html.match(/<img\b[^>]*>/gi) || [];
@@ -143,8 +154,8 @@ export async function onRequestPost({ request }) {
     if (imageValue && typeof imageValue === "object") imageValue = imageValue.url || imageValue.contentUrl;
     const image = absoluteImage(imageValue, target) || absoluteImage(meta(html, "og:image"), target) || absoluteImage(meta(html, "twitter:image"), target) || (/(^|\.)amazon\./i.test(target.hostname) ? amazonImage(html, target) : "");
     const price = priceFromProduct(product) || meta(html, "product:price:amount") || meta(html, "og:price:amount") || (/(^|\.)amazon\./i.test(target.hostname) ? amazonPrice(html) : "");
-    const numericPrice = Number(String(price).replace(",", "."));
-    return reply(200, { title, image, price: Number.isFinite(numericPrice) && numericPrice >= 0 ? numericPrice : "", currency: product?.offers?.priceCurrency || product?.offers?.priceCurrency || meta(html, "product:price:currency") || "", store: storeName(target, html), url: target.href, found: Boolean(title || image || price) });
+    const numericPrice = parsePrice(price);
+    return reply(200, { title, image, price: numericPrice, currency: product?.offers?.priceCurrency || meta(html, "product:price:currency") || meta(html, "og:price:currency") || "", store: storeName(target, html), url: target.href, found: Boolean(title || image || price) });
   } catch (error) {
     if (error?.name === "AbortError") return reply(504, { error: "A loja demorou demais para responder. Tente novamente." });
     const message = String(error?.message || "");
