@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "Wanted List — Diário de Tesouros",
+  "short_name": "Wanted List",
+  "description": "Sua coleção de desejos e tesouros no universo One Piece.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#17191b",
+  "theme_color": "#17191b",
+  "icons": [
+    {"src": "assets/icons/law-favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "assets/icons/law-favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

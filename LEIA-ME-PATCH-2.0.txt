@@ -1,0 +1,22 @@
+WANTED LIST — PATCH 2.0
+
+Arquivos deste patch:
+- app.js: tela inicial alterada para Baús do Tesouro; fechamento robusto dos modais de cadastro/edição.
+- index.html: favicon do Law e ícone Apple Touch; atualização do cache-buster do app.js.
+- assets/icons/law-favicon-32.png
+- assets/icons/law-favicon-180.png
+- assets/icons/law-favicon-192.png
+
+COMO APLICAR
+1. Faça uma cópia de segurança da pasta atual do Wanted List.
+2. Extraia este ZIP.
+3. Copie os arquivos mantendo os caminhos e substitua os existentes.
+4. Abra o aplicativo e pressione Ctrl+F5 (ou feche e abra novamente o PWA).
+
+CORREÇÕES
+- A aplicação passa a abrir em Baús do Tesouro tanto no início quanto após carregar os dados da nuvem ou usar o cache local.
+- Os botões X e Cancelar dos formulários de produto e baú agora fecham os modais explicitamente, mesmo quando campos obrigatórios estão vazios.
+- Clicar fora dos diálogos também fecha a janela.
+- O ícone do navegador e o ícone de atalho Apple usam a arte do Law já existente no projeto.
+
+A validação de sintaxe JavaScript foi executada com sucesso (node --check app.js).

@@ -1,0 +1,12 @@
+WANTED LIST 1.9 — PROTEÇÃO DOS BAÚS PRIVADOS
+
+IMPORTANTE: faça backup JSON dentro do aplicativo antes de começar. Não apague a tabela wanted_list_state.
+
+1) No Supabase > SQL Editor, execute supabase-secure-migration.sql. Isso remove acesso direto anon/authenticated à tabela sem apagar dados.
+2) No Supabase > Edge Functions, crie uma função chamada wanted-list-secure e publique o conteúdo de supabase/functions/wanted-list-secure/index.ts.
+3) Configure os secrets da função: SUPABASE_URL (URL do projeto), SUPABASE_SERVICE_ROLE_KEY (Secret key/service_role do projeto; somente no servidor) e PRIVATE_CHEST_PIN=2025. NUNCA coloque service_role no app ou compartilhe essa chave.
+4) Configure a função para aceitar chamadas públicas sem JWT (verify_jwt=false), pois o app não tem login. A validação do PIN acontece dentro da função.
+5) Copie app.js e index.html deste patch para a pasta do aplicativo. Mantenha supabase-config.js e assets.
+6) Teste em guia normal e anônima: baú público abre sem PIN; baú privado solicita PIN; PIN incorreto falha; após 8 tentativas incorretas em 15 minutos, o IP fica temporariamente limitado; PIN correto abre; salvar um produto público não remove os dados privados.
+
+NOTA DE SEGURANÇA: o PIN fixo é uma credencial compartilhada. A função faz a validação no servidor, mas uma senha curta de 4 dígitos não equivale a uma conta de proprietário. A proteção contra tentativas precisa de rate limiting adicional no gateway/Cloudflare antes de expor publicamente.

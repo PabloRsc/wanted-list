@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Pirata+One&family=Roboto+Condensed:wght@400;500;600;700;800&display=swap');
+:root{--bg:#111315;--panel:#202326;--panel2:#292b2c;--red:#a91e1c;--red2:#d52b25;--gold:#e6b96d;--cream:#f2dfb5;--ink:#21190f;--muted:#b9b1a5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% 0%,#28313a 0,#171a1c 40%,#101112 100%);color:#f5f0e8;font-family:'Roboto Condensed',Arial,sans-serif}.app-shell{min-height:100vh}.hero{height:190px;margin-left:260px;display:flex;align-items:center;justify-content:space-between;padding:25px 6%;background:linear-gradient(90deg,rgba(9,13,18,.83),rgba(8,12,18,.3)),url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1800&q=85') center 48%/cover;border-bottom:4px solid #8d5b2d;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 28px,rgba(255,255,255,.025) 29px 30px);pointer-events:none}.flag{font-size:76px;color:#fff;text-shadow:0 4px 4px #000}.hero-copy{flex:1;margin-left:28px;text-shadow:2px 3px 5px #000}.hero h1{font:clamp(42px,5vw,70px)/.9 'Pirata One',serif;letter-spacing:2px;margin:7px 0;color:#f5dfb2}.hero h1 span{color:#d83b2f}.hero p{margin:10px 0 0;color:#fff0d5}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:800}.hero-art{font:48px 'Pirata One';text-align:center;color:var(--gold);text-shadow:2px 3px #000}.hero-art small{font-size:12px;letter-spacing:3px}.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:linear-gradient(180deg,#17191b,#0d0f10);border-right:1px solid #56402a;padding:22px 16px;display:flex;flex-direction:column;z-index:3}.brand{display:flex;align-items:center;gap:12px;padding:8px 8px 24px;border-bottom:1px solid #51412f}.brand-skull{font-size:38px;color:var(--gold)}.brand b{font:24px 'Pirata One';color:#f4d69e;display:block}.brand small{font-size:9px;letter-spacing:1px;color:#a99b84}.sidebar nav{display:grid;gap:8px;padding:22px 0}.nav{border:1px solid transparent;background:transparent;color:#e9e0d2;text-align:left;padding:12px 13px;border-radius:12px;font:600 16px 'Roboto Condensed';cursor:pointer;display:flex;gap:12px;align-items:center}.nav:hover,.nav.active{background:linear-gradient(100deg,#a51d1a,#641513);border-color:#e8b765;box-shadow:0 0 12px #a42b2080}.nav span{flex:1}.wanted-note{margin-top:auto;border:2px solid #9a6a36;background:#d9bd82;color:#25180d;padding:12px;text-align:center;transform:rotate(-2deg);box-shadow:3px 5px #080808}.wanted-stamp{font:25px 'Pirata One';border-bottom:2px solid #372719}.wanted-emoji{font-size:48px;padding:6px}.wanted-note b,.wanted-note small{display:block}.wanted-note small{font-size:11px;margin-top:5px}.sidebar-foot{text-align:center;color:#726858;font-size:9px;letter-spacing:1px;margin-top:20px}.main{margin-left:260px;padding:22px clamp(18px,3vw,48px) 60px;max-width:1800px}.topline{display:flex;justify-content:space-between;color:#c9bda9;border-bottom:1px solid #393632;padding-bottom:12px;margin-bottom:22px}.local-pill{font-size:10px;color:#8ac69b;letter-spacing:1px}.view{animation:fade .2s ease}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}.hidden{display:none!important}.welcome{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;margin-bottom:24px}.parchment{color:#2b1b0c;background:linear-gradient(110deg,#f1d9a6,#c69b58);border:3px solid #69421e;box-shadow:inset 0 0 22px #8a592c55,0 5px 15px #0008;clip-path:polygon(1% 3%,98% 0,100% 9%,99% 90%,96% 100%,2% 96%,0 10%)}.welcome small{font-weight:800;letter-spacing:2px}.welcome h2{font:30px 'Pirata One';margin:6px 0}.welcome p{margin:0}.welcome-icon{font-size:56px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 14px}.section-head h2{font:26px 'Pirata One';margin:0;color:#f2dfbb}.red-btn,.gold-btn,.ghost-btn{border:0;border-radius:10px;padding:11px 16px;font:700 14px 'Roboto Condensed';cursor:pointer}.red-btn{background:linear-gradient(#d9322b,#9d1716);color:white;border:1px solid #f06448;box-shadow:0 3px 0 #5d1110}.gold-btn{background:linear-gradient(#f3d18c,#b77b36);color:#26180c;border:1px solid #ffdc96}.ghost-btn{background:#252729;color:#ead7b5;border:1px solid #574733}.wishlist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.list-card{border:1px solid #8d6537;border-radius:14px;overflow:hidden;background:linear-gradient(145deg,#292b2d,#191b1d);box-shadow:0 6px 15px #0007;cursor:pointer}.list-cover{height:130px;background:linear-gradient(135deg,#8f1d1d,#e2a54d);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;border-bottom:3px solid #9b6a35}.list-cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 18px,#fff1 19px 20px)}.list-body{padding:13px}.list-body h3{font:23px 'Pirata One';margin:0 0 5px;color:#f1d5a3}.list-body p{font-size:12px;color:#bcb2a4;min-height:28px;margin:0 0 12px}.list-meta{display:flex;justify-content:space-between;color:#e8bd73;font-size:12px}.poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:18px}.poster{background:linear-gradient(135deg,#f3d9a0,#c89b5d 55%,#f0d8a2);color:#25180c;padding:9px 9px 12px;border:3px solid #70451e;box-shadow:0 7px 14px #0009;position:relative;cursor:pointer;transform:rotate(var(--tilt,0deg));transition:.18s;min-width:0}.poster:hover{transform:translateY(-5px) rotate(0);box-shadow:0 12px 20px #000b}.poster:before{content:"";position:absolute;inset:4px;border:1px solid #8c5a2a;pointer-events:none}.poster-title{text-align:center;font:34px/.95 'Pirata One';letter-spacing:2px;border-bottom:2px solid #392414;padding:3px 0 7px}.poster-img{height:145px;margin:8px 3px 5px;border:2px solid #4d321b;background:linear-gradient(135deg,#8d9da3,#d5b57b);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:65px}.poster-img img{width:100%;height:100%;object-fit:cover}.poster-status{text-align:center;font-size:10px;font-weight:900;background:#a3201c;color:#fff;padding:3px;margin:5px 12px;border-radius:10px}.poster-status.bought{background:#315f3d}.poster-status.given{background:#62506c}.poster-name{text-align:center;font-weight:800;font-size:15px;line-height:1.1;min-height:34px;margin:7px 2px}.poster-price{text-align:center;font:25px 'Pirata One';border-top:1px solid #79512b;padding-top:5px}.poster-store{text-align:center;font-size:10px;margin-top:4px}.compact{grid-template-columns:repeat(auto-fill,minmax(135px,1fr))}.compact .poster-img{height:100px}.compact .poster-title{font-size:25px}.toolbar{display:flex;gap:10px;margin:15px 0 20px;flex-wrap:wrap}.toolbar input{flex:1;min-width:180px}.toolbar input,.toolbar select,input,textarea,select{background:#191b1d;color:#f5ead8;border:1px solid #62503a;border-radius:8px;padding:11px;font:14px 'Roboto Condensed';width:100%}.toolbar select{width:auto;min-width:150px}.view-toggle{padding:10px;color:#d9b778;font-size:11px;letter-spacing:1px;border:1px solid #55432e;border-radius:8px}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:18px 0}.stat{background:linear-gradient(145deg,#2c2c2b,#17191a);border:1px solid #735331;border-radius:12px;padding:18px}.stat strong{display:block;font:32px 'Pirata One';color:#f1c77d}.stat span{color:#bcb2a4;font-size:12px}.panel{background:#202224;border:1px solid #57442f;border-radius:14px;padding:20px;margin-top:20px}.panel h3{font:24px 'Pirata One';margin:0 0 12px;color:#f2d9a9}.history-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #393633;color:#ddd}.history-row b{color:#edc477}.settings-panel p{color:#c6bcae;line-height:1.5}.actions{display:flex;gap:10px;flex-wrap:wrap}.upload-label{display:inline-block;cursor:pointer}.upload-label input{display:none}.warning{font-size:12px;color:#e5b96d!important}.modal{background:linear-gradient(145deg,#282725,#17191b);color:#f5ead8;border:2px solid #987044;border-radius:16px;padding:26px;width:min(560px,92vw);max-height:90vh;overflow:auto;box-shadow:0 20px 80px #000}.modal::backdrop{background:#000b}.modal h2{font:32px 'Pirata One';color:#f0d4a0;margin:6px 0 18px}.modal label{display:block;font-weight:700;font-size:13px;margin:12px 0}.modal label input,.modal label textarea,.modal label select{display:block;margin-top:6px}.modal textarea{min-height:70px;resize:vertical}.modal small{color:#c8b99f}.close{float:right;background:none;border:0;color:#e8d6b7;font-size:27px;cursor:pointer}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cover-options{display:flex;gap:8px;flex-wrap:wrap}.cover-choice{background:#242526;color:#f5d7a3;border:1px solid #775632;border-radius:9px;padding:9px;min-width:72px;font-size:27px;cursor:pointer}.cover-choice small{display:block;font-size:10px}.cover-choice.selected{border:2px solid #e9b967;background:#56321e}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.detail-modal{width:min(700px,94vw)}.detail-layout{display:grid;grid-template-columns:220px 1fr;gap:20px}.detail-poster{max-width:220px}.detail-info p{color:#c9bdad}.detail-price{font:32px 'Pirata One';color:#f0c77d}.detail-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.detail-tabs button{background:#292a2a;border:1px solid #685034;color:#e8d2a9;padding:8px;border-radius:7px;cursor:pointer}.fruit-rating{display:flex;gap:7px;margin:10px 0}.fruit-rating button{font-size:30px;background:none;border:1px solid transparent;cursor:pointer;filter:grayscale(1);opacity:.5}.fruit-rating button.selected{filter:none;opacity:1;transform:scale(1.15)}.toast{position:fixed;bottom:20px;right:20px;background:#e9c47e;color:#23170b;padding:12px 18px;border-radius:9px;font-weight:800;box-shadow:0 4px 20px #0009;opacity:0;transform:translateY(10px);transition:.2s;z-index:9}.toast.show{opacity:1;transform:none}
+@media(max-width:900px){.hero{margin-left:0;height:175px;min-height:175px;padding:18px}.sidebar{position:fixed;top:auto;bottom:0;right:0;width:100%;height:68px;padding:5px 8px;border-right:0;border-top:1px solid #76542e}.brand,.wanted-note,.sidebar-foot{display:none}.sidebar nav{display:flex;justify-content:space-around;padding:0;gap:2px;height:100%}.nav{flex:1;justify-content:center;flex-direction:column;gap:1px;padding:5px 2px;font-size:19px;border-radius:8px}.nav span{font-size:9px}.main{margin-left:0;padding:17px 14px 90px}.hero-art{display:none}.hero-copy{margin-left:12px}.flag{font-size:48px}.hero h1{font-size:44px}.poster-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}.poster-img{height:125px}.section-head{align-items:flex-start}.section-head h2{font-size:23px}.welcome h2{font-size:25px}.welcome-icon{font-size:40px}}
+@media(max-width:480px){.hero{height:120px}.hero h1{font-size:37px}.hero p{font-size:11px}.flag{font-size:38px}.poster-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{padding:7px}.poster-title{font-size:28px}.poster-img{height:115px}.poster-price{font-size:22px}.toolbar select{flex:1}.two{grid-template-columns:1fr}.detail-layout{grid-template-columns:1fr}.detail-poster{margin:auto}.welcome{padding:16px}.welcome-icon{display:none}.topline{font-size:12px}}
+
+/* Functional update 1.1 — additions only; base visual intentionally preserved */
+.list-actions{display:flex;gap:8px;margin-top:10px}
+.list-actions button{border:1px solid #786044;background:#292725;color:#ead5ae;border-radius:7px;padding:6px 10px;cursor:pointer}
+.list-actions button:hover{border-color:#d8ae69}
+#sortProducts{max-width:170px}
+@media(max-width:620px){.list-actions button{flex:1}#sortProducts{max-width:none}}
+
+
+/* Wanted List 1.2 — dialog usability and purchase workflow */
+dialog{border:0;padding:0;margin:auto;background:transparent;color:inherit;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:visible}
+dialog::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(3px)}
+dialog[open]{display:block}
+.modal{width:min(680px,calc(100vw - 32px));max-height:min(86dvh,820px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:clamp(18px,3vw,30px);margin:0;border:1px solid #987044;box-shadow:0 22px 75px rgba(0,0,0,.72)}
+.modal h2{font-size:clamp(27px,4vw,35px);line-height:1.05;padding-right:32px}
+.modal label{line-height:1.35}
+.modal input:not([type=file]),.modal textarea,.modal select{min-height:43px}
+.modal textarea{min-height:92px}
+.modal input[type=file]{font-size:13px;max-width:100%;padding:9px}
+.modal-actions{position:sticky;bottom:-1px;background:linear-gradient(180deg,rgba(25,27,29,0),#191b1d 28%);padding-top:16px;padding-bottom:2px}
+.close{position:sticky;top:0;z-index:2;margin-left:10px;padding:0 3px;line-height:1}
+#productDialog .modal{width:min(740px,calc(100vw - 32px))}
+#detailDialog .detail-modal{width:min(860px,calc(100vw - 32px));max-height:min(86dvh,820px)}
+.detail-modal .detail-layout{grid-template-columns:minmax(170px,240px) minmax(0,1fr);align-items:start}
+.detail-info{min-width:0;overflow-wrap:anywhere}
+.detail-info a{color:#d9b16f}
+.list-selector{border:1px solid #62503a;border-radius:9px;padding:10px 12px;margin:12px 0;color:#f5ead8;min-width:0}
+.list-selector legend{font-size:13px;font-weight:700;padding:0 5px;color:#f5ead8}
+.list-selector>small{display:block;margin-top:8px;color:#c8b99f}
+.list-check-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:7px}
+.list-check{display:flex!important;align-items:center;gap:9px;background:#242526;border:1px solid #574733;border-radius:8px;padding:9px 10px!important;margin:0!important;min-width:0}
+.list-check input{width:17px!important;height:17px;min-height:0!important;accent-color:#d9a85f;flex:0 0 auto;margin:0}
+.list-check span{overflow-wrap:anywhere;font-weight:500}
+.review-panel{margin-top:14px;padding:14px;border:1px solid #80603b;border-radius:12px;background:#191b1d}
+.review-panel h3{font:24px 'Pirata One';color:#f0d4a0;margin:0 0 5px}
+.review-panel p{margin:7px 0;color:#c9bdad}
+.review-panel textarea{width:100%;min-height:80px}
+.review-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:10px}
+.fruit-rating button:focus-visible,.modal button:focus-visible,.modal input:focus-visible,.modal textarea:focus-visible,.modal select:focus-visible{outline:2px solid #e6b96d;outline-offset:2px}
+@media(max-width:620px){
+  dialog{max-width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}
+  .modal,#productDialog .modal,#detailDialog .detail-modal{width:calc(100vw - 20px);max-height:calc(100dvh - 24px);padding:18px;border-radius:13px}
+  .two{grid-template-columns:1fr;gap:0}
+  .detail-modal .detail-layout{grid-template-columns:1fr;gap:14px}
+  .detail-poster{width:min(220px,75%);margin:0 auto}
+  .modal-actions{position:static}
+  .list-check-grid{grid-template-columns:1fr}
+}
+.saved-rating{color:#e7c17d!important;font-size:15px}.saved-rating span{font-size:12px;color:#c9bdad;margin-left:6px}
+.purchase-fields{margin:10px 0}.purchase-fields label{font-size:12px!important}
+.purchase-meta,.purchase-review{font-size:13px;color:#c9bdad!important;line-height:1.6}.purchase-meta b{color:#e7c17d}.purchase-review{font-style:italic;border-left:2px solid #987044;padding-left:10px}
+
+
+/* Wanted List 1.2.1 — single-scroll dialogs and cleaner form layout */
+body:has(dialog[open]){overflow:hidden}
+dialog{
+  position:fixed;
+  inset:0;
+  margin:auto;
+  padding:0;
+  border:0;
+  overflow:hidden;
+  max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - 24px);
+}
+dialog[open]{display:block}
+dialog .modal{
+  box-sizing:border-box;
+  margin:0;
+  max-height:calc(100dvh - 40px);
+  overflow-x:hidden;
+  overflow-y:auto;
+  scrollbar-gutter:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+#wishlistDialog .modal{width:min(620px,calc(100vw - 32px))}
+#productDialog .modal{width:min(720px,calc(100vw - 32px))}
+#detailDialog .detail-modal{width:min(860px,calc(100vw - 32px))}
+.modal-actions{
+  position:sticky;
+  bottom:0;
+  z-index:3;
+  padding:14px 0 2px;
+  margin-top:18px;
+  background:linear-gradient(180deg,rgba(25,27,29,0),#1b1c1d 24%);
+}
+.modal label{display:block;margin:13px 0}
+.modal input:not([type=file]),.modal textarea,.modal select{
+  box-sizing:border-box;
+  width:100%;
+}
+.modal textarea{resize:vertical}
+.modal input[type=file]{box-sizing:border-box;width:100%;min-width:0}
+.modal .cover-options{margin:8px 0 14px}
+.modal .list-selector{margin:14px 0}
+.modal .close{position:sticky;top:0;float:right;margin:0 0 0 10px}
+#detailDialog .detail-modal{overflow-y:auto}
+@media(max-width:620px){
+  dialog{max-width:calc(100vw - 12px);max-height:calc(100dvh - 16px)}
+  dialog .modal{width:calc(100vw - 20px)!important;max-height:calc(100dvh - 24px);padding:17px}
+  .modal-actions{position:sticky;bottom:0}
+}
+
+.modal{position:relative}
+.modal .close{position:absolute;top:15px;right:17px;float:none;margin:0;line-height:1}
+.modal h2{padding-right:38px}
+
+/* Wanted List 1.3 — icon system: uniform medallions */
+.brand-skull{width:44px;height:44px;display:grid;place-items:center;flex:0 0 44px}
+.brand-skull img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 3px #0009)}
+.flag{width:76px;height:76px;display:grid;place-items:center;flex:0 0 76px}
+.flag img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 5px #000b)}
+.nav{gap:11px;min-height:54px}
+.nav-icon-wrap{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border:1px solid rgba(226,184,112,.48);border-radius:11px;background:radial-gradient(circle at 50% 25%,#3a342b 0,#211f1c 72%);box-shadow:inset 0 1px 3px #ffffff12,0 2px 5px #0005;overflow:hidden}
+.nav-icon{display:block;width:31px;height:31px;object-fit:contain;filter:drop-shadow(0 1px 2px #0008)}
+.nav:hover .nav-icon-wrap,.nav.active .nav-icon-wrap{border-color:#f0c779;background:radial-gradient(circle at 50% 25%,#59452d 0,#2b2119 76%);box-shadow:0 0 9px #e5b86b35,inset 0 1px 3px #fff2}
+.nav span:last-child{min-width:0}
+.crumb-icon{width:24px;height:24px;object-fit:contain;vertical-align:middle;margin-right:5px;filter:drop-shadow(0 1px 2px #0008)}
+@media(max-width:900px){
+ .nav{min-height:0;gap:2px;padding:4px 2px;font-size:10px}
+ .nav-icon-wrap{width:31px;height:31px;flex-basis:31px;border-radius:9px}
+ .nav-icon{width:26px;height:26px}
+ .nav span:last-child{font-size:9px;line-height:1.05;text-align:center}
+ .flag{width:54px;height:54px;flex-basis:54px}
+}
+@media(max-width:480px){.nav-icon-wrap{width:28px;height:28px;flex-basis:28px}.nav-icon{width:23px;height:23px}}
+/* Rating symbol: exact supplied icon recolored to gold */
+.fruit-rating{align-items:center;gap:8px}
+.fruit-rating button{width:42px;height:42px;padding:3px;display:grid;place-items:center;filter:none;opacity:.34;transition:transform .15s,opacity .15s}
+.fruit-rating button img{width:100%;height:100%;object-fit:contain;display:block}
+.fruit-rating button.selected{opacity:1;transform:scale(1.08);filter:drop-shadow(0 0 5px #e7bd55aa)}
+.fruit-rating button:hover{opacity:1;transform:scale(1.08)}
+
+/* Shared page-icon sizing; consistent with the sidebar medallions */
+.heading-icon{width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:5px;filter:drop-shadow(0 1px 2px #0009)}
+.welcome-icon{width:76px;height:76px;display:grid;place-items:center}
+.welcome-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px #0006)}
+.search-field{display:flex;align-items:center;gap:7px;min-width:180px;flex:1;border:1px solid #5a4934;background:#1b1d1e;border-radius:9px;padding:0 9px}
+.search-field>img{width:30px;height:30px;object-fit:contain;flex:0 0 30px}
+.search-field input{border:0!important;background:transparent!important;box-shadow:none!important;min-width:0;width:100%;padding-left:0!important}
+.search-field:focus-within{border-color:#e6b96d;box-shadow:0 0 0 2px #e6b96d22}
+@media(max-width:480px){.heading-icon{width:29px;height:29px}.welcome-icon{width:54px;height:54px}}
+
+/* Wanted List 1.4 — new anime banner and prominent crew icons */
+.hero{
+  background-image:url('assets/home-banner.webp');
+  background-position:center center;
+  background-size:cover;
+  min-height:180px;
+}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,13,15,.08),rgba(12,13,15,0) 48%,rgba(12,13,15,.08));pointer-events:none}
+.hero .flag,.hero .hero-copy,.hero .hero-art{display:none!important}
+.sidebar{width:270px;padding:22px 15px}
+.main{margin-left:270px}
+.brand{gap:13px;padding:8px 8px 24px}
+.brand-skull{width:54px;height:54px;flex:0 0 54px}
+.brand-skull img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px #000b)}
+.sidebar nav{gap:9px;padding:22px 0}
+.nav{
+  min-height:68px;
+  gap:14px;
+  padding:9px 12px;
+  border:1px solid transparent;
+  border-radius:13px;
+  font-size:16px;
+  font-weight:700;
+}
+.nav-icon-wrap{
+  width:54px;height:54px;flex:0 0 54px;
+  display:grid;place-items:center;
+  border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;
+}
+.nav-icon{
+  width:50px;height:50px;object-fit:contain;display:block;
+  filter:drop-shadow(0 3px 4px #000b);
+  transition:transform .16s ease,filter .16s ease;
+}
+.nav:hover .nav-icon,.nav.active .nav-icon{
+  transform:scale(1.09);
+  filter:drop-shadow(0 0 5px #f1c36e99) drop-shadow(0 3px 4px #000b);
+}
+.nav:hover .nav-icon-wrap,.nav.active .nav-icon-wrap{background:transparent;border:0;box-shadow:none}
+.nav span:last-child{flex:1;line-height:1.15}
+.heading-icon{width:39px;height:39px;vertical-align:middle}
+.crumb-icon{width:29px;height:29px}
+@media(max-width:900px){
+  .hero{margin-left:0;height:clamp(112px,24vw,160px);min-height:0;padding:0;background-position:center}
+  .sidebar{width:100%;height:78px;padding:4px 6px}
+  .sidebar nav{gap:2px;padding:0}
+  .nav{min-height:0;flex:1;flex-direction:column;justify-content:center;gap:0;padding:3px 1px;border-radius:8px;font-size:9px}
+  .nav-icon-wrap{width:43px;height:43px;flex:0 0 43px}
+  .nav-icon{width:41px;height:41px}
+  .nav span:last-child{font-size:9px;line-height:1.05;text-align:center;white-space:normal}
+  .main{margin-left:0;padding:17px 14px 100px}
+}
+@media(max-width:480px){
+  .hero{height:112px;background-position:center}
+  .sidebar{height:74px}
+  .nav-icon-wrap{width:36px;height:36px;flex-basis:36px}
+  .nav-icon{width:35px;height:35px}
+  .nav span:last-child{font-size:8px}
+}
+
+
+/* WANTED LIST 1.5 — refined banner, Law identity and summary dashboard */
+.hero{height:230px;min-height:230px;margin-left:270px;padding:22px 5%;display:flex;align-items:center;justify-content:flex-start;gap:24px;position:relative;isolation:isolate;overflow:hidden;background:#17191b;border-bottom:4px solid #8d5b2d}
+.hero:before{content:"";position:absolute;inset:-9px;z-index:-2;background:url('assets/home-banner.jpg') center 47%/cover no-repeat;filter:blur(4px);transform:scale(1.04);opacity:.75}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,14,17,.94) 0%,rgba(11,14,17,.76) 35%,rgba(11,14,17,.34) 100%);pointer-events:none}
+.hero-brandmark{width:76px;height:76px;flex:0 0 76px;display:grid;place-items:center}
+.hero-brandmark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 5px #000c)}
+.hero-copy{margin:0;flex:1;position:relative;z-index:1;text-shadow:2px 3px 5px #000}
+.hero h1{font:clamp(42px,5vw,66px)/.92 'Pirata One',serif;letter-spacing:2px;margin:7px 0;color:#f5dfb2}
+.hero h1 span{color:#d83b2f}.hero p{margin:10px 0 0;color:#fff0d5;font-size:16px}
+.hero-art{display:none!important}
+.sidebar{width:270px;padding:20px 15px 16px}.main{margin-left:270px}
+.brand{gap:12px;padding:8px 8px 22px}.brand-skull{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center}.brand-skull img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px #000b)}
+.sidebar nav{gap:9px;padding:24px 0}.nav{min-height:70px;gap:15px;padding:9px 12px;border-radius:13px;font-size:16px;font-weight:700}
+.nav-icon-wrap{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.nav-icon{width:56px;height:56px;object-fit:contain;display:block;filter:drop-shadow(0 3px 4px #000b);transition:transform .16s ease,filter .16s ease}
+.nav:hover .nav-icon,.nav.active .nav-icon{transform:scale(1.1);filter:drop-shadow(0 0 6px #f1c36eaa) drop-shadow(0 3px 4px #000b)}
+.nav:hover .nav-icon-wrap,.nav.active .nav-icon-wrap{background:transparent;border:0;box-shadow:none}.nav span:last-child{flex:1;line-height:1.15}
+.wanted-note{display:none!important}.sidebar-foot{margin-top:auto;padding-top:15px}
+.hero .flag,.hero .hero-art{display:none!important}
+.dashboard-welcome{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:22px 25px;margin-bottom:22px;border:1px solid #735331;border-radius:14px;background:linear-gradient(110deg,#292725,#1b1e20);box-shadow:0 6px 18px #0005}
+.dashboard-welcome h2{font:32px 'Pirata One';color:#f2d9a9;margin:5px 0}.dashboard-welcome p{color:#c9bdad;margin:0;line-height:1.45}.dashboard-actions{display:flex;gap:10px;flex-wrap:wrap}
+.dashboard-section-head{margin-top:8px}.dashboard-section-head h2{font:26px 'Pirata One';color:#f2dfbb;margin:4px 0}
+.stats-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:14px 0 18px}.stat{min-height:104px;padding:17px 18px;background:linear-gradient(145deg,#2c2c2b,#17191a);border:1px solid #735331;border-radius:12px}.stat strong{font:29px 'Pirata One';color:#f1c77d;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.stat span{display:block;margin-top:5px;color:#bcb2a4;font-size:12px}
+.dashboard-two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}.dashboard-lower{margin-top:15px}.dashboard-two-col .panel{margin-top:0;min-width:0}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-heading h3{margin-bottom:12px}.panel-heading>strong{font:26px 'Pirata One';color:#edc477}.progress-track{height:13px;background:#111415;border:1px solid #514332;border-radius:20px;overflow:hidden;margin:8px 0 12px}.progress-fill{height:100%;background:linear-gradient(90deg,#9d241f,#e6b75e);border-radius:20px;transition:width .25s ease}.progress-panel p{color:#c6bcae;font-size:13px;line-height:1.45}.progress-legend{display:flex;gap:14px;flex-wrap:wrap;color:#bcb2a4;font-size:11px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.bought-dot{background:#73ad79}.desired-dot{background:#e5b45d}.abandoned-dot{background:#9b7777}.quick-line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #393633;color:#c9bdad;font-size:13px}.quick-line:last-child{border-bottom:0}.quick-line b{color:#edc477}.text-action{border:0;background:none;color:#e7bd78;font:700 12px 'Roboto Condensed';cursor:pointer}.summary-list-row,.summary-product-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #393633;min-width:0}.summary-list-row:last-child,.summary-product-row:last-child{border-bottom:0}.summary-list-emoji{font-size:25px;width:32px;text-align:center}.summary-row-main{display:flex;flex:1;flex-direction:column;min-width:0;gap:3px}.summary-row-main b{font-size:13px;color:#eee0c8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.summary-row-main small{font-size:11px;color:#a99f91}.summary-list-row> b,.summary-product-row>strong{font-size:12px;color:#e7bd78;white-space:nowrap}.summary-product-row{width:100%;border-top:0;border-left:0;border-right:0;background:none;color:inherit;text-align:left;cursor:pointer}.summary-product-row:hover .summary-row-main b{color:#f0c77d}.summary-product-status{width:9px;height:9px;border-radius:50%;background:#e5b45d;flex:0 0 9px}.summary-product-status.is-bought{background:#73ad79}.summary-product-status.is-abandoned{background:#9b7777}
+@media(max-width:1000px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-two-col{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.hero{margin-left:0;height:175px;min-height:175px;padding:15px 20px;gap:13px}.hero-brandmark{width:55px;height:55px;flex-basis:55px}.hero h1{font-size:clamp(34px,6vw,48px)}.hero p{font-size:12px}.hero-art{display:none!important}.sidebar{width:100%;height:82px;padding:4px 5px}.brand,.sidebar-foot{display:none}.sidebar nav{display:flex;justify-content:space-around;gap:2px;padding:0;height:100%}.nav{flex:1;min-height:0;flex-direction:column;justify-content:center;gap:0;padding:2px 1px;font-size:9px}.nav-icon-wrap{width:45px;height:45px;flex-basis:45px}.nav-icon{width:43px;height:43px}.nav span:last-child{font-size:9px;text-align:center;line-height:1.02}.main{margin-left:0;padding:17px 14px 100px}.dashboard-welcome{align-items:flex-start;flex-direction:column}.dashboard-actions{width:100%}}
+@media(max-width:560px){.hero{height:145px;min-height:145px;padding:12px 14px;gap:9px}.hero-brandmark{width:43px;height:43px;flex-basis:43px}.hero h1{font-size:34px;letter-spacing:1px}.hero p{font-size:10px;margin-top:6px}.hero .eyebrow{font-size:9px}.sidebar{height:76px}.nav-icon-wrap{width:36px;height:36px;flex-basis:36px}.nav-icon{width:35px;height:35px}.nav span:last-child{font-size:8px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{min-height:92px;padding:13px}.stat strong{font-size:24px}.stat span{font-size:11px}.dashboard-two-col{grid-template-columns:1fr}.dashboard-welcome{padding:17px}.dashboard-welcome h2{font-size:27px}.dashboard-actions button{flex:1;padding:10px 8px;font-size:12px}.dashboard-section-head h2{font-size:23px}}
+
+/* Patch 1.6 — restore all navigation views and improve banner visibility */
+.list-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:7px;padding:10px;border:1px solid #574733;border-radius:9px;background:#191b1d;max-height:150px;overflow:auto}
+.list-check{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid #514332;border-radius:7px;color:#ead7b5;font-size:13px}
+.list-check input{accent-color:#c68b43}
+.field-label>label{display:block;margin-bottom:6px;font-weight:700}
+.field-label>small{display:block;color:#a99f91;margin-top:5px}
+@media(max-width:900px){.hero{background-position:center 48%}}
+@media(max-width:560px){.hero{background-position:center 48%}}
+
+/* Baús privados */
+.privacy-toggle{display:flex!important;align-items:flex-start;gap:10px;padding:12px;border:1px solid #806039;border-radius:10px;background:#211d19}.privacy-toggle input{width:18px!important;height:18px;margin:2px 0 0;accent-color:#c89b5d}.privacy-toggle span{display:flex;flex-direction:column;gap:4px}.privacy-toggle small{font-weight:400;color:#c8b99f}.list-privacy{font-size:10px;letter-spacing:1px;color:#e9bd76;margin:6px 0 10px}

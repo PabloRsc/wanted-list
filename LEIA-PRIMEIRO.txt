@@ -1,0 +1,12 @@
+WANTED LIST — PATCH 1.8.1
+
+Correção:
+- Remove a exibição do PIN 2025 no formulário de criação/edição de baú.
+- O texto agora informa apenas que será solicitada uma senha de 4 dígitos.
+
+Instalação:
+1. Faça uma cópia de segurança da pasta atual.
+2. Substitua somente o arquivo index.html pelo arquivo deste pacote.
+3. Recarregue o aplicativo (Ctrl+F5).
+
+O PIN continua sendo 2025; apenas deixa de ser exibido na interface de criação do baú.

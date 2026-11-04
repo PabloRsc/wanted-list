@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17191b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Wanted List"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="assets/icons/law-favicon-32.png"><link rel="apple-touch-icon" href="assets/icons/law-favicon-180.png"><title>Wanted List — Diário de Tesouros</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="hero" aria-label="Wanted List — Diário de Tesouros">
+    <div class="hero-brandmark"><img src="assets/icons/law-logo.png" alt="Símbolo dos Piratas do Coração"></div>
+    <div class="hero-copy"><div class="eyebrow">DIÁRIO DE TESOUROS</div><h1>WANTED <span>LIST</span></h1><p>Minha lista de desejos • Sua próxima grande aventura</p></div>
+  </header>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-skull"><img src="assets/icons/law-logo.png" alt="Símbolo dos Piratas do Coração"></span><div><b>WANTED LIST</b><small>CAPITÃO DO SEU TESOURO</small></div></div>
+    <nav>
+      <button class="nav" data-view="wishlists"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/luffy-flag.png" alt=""></span><span>Baús do Tesouro</span></button>
+      <button class="nav" data-view="products"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/gomu_gomu.png" alt=""></span><span>Produtos</span></button>
+      <button class="nav" data-view="conquered"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/nami.png" alt=""></span><span>Tesouros conquistados</span></button>
+      <button class="nav active" data-view="summary"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/robin.png" alt=""></span><span>Resumo</span></button>
+      <button class="nav" data-view="settings"><span class="nav-icon-wrap"><img class="nav-icon" src="assets/icons/franky.png" alt=""></span><span>Configurações</span></button>
+    </nav>
+    <div class="sidebar-foot">FEITO PARA GRANDES AVENTURAS</div>
+  </aside>
+  <main class="main">
+    <div class="topline"><span id="crumb"><img class="crumb-icon" src="assets/icons/robin.png" alt=""> Resumo</span><span class="local-pill">● CONECTANDO À NUVEM…</span></div>
+    <section id="view-summary" class="view">
+      <div class="dashboard-welcome"><div><small class="eyebrow">AHOY, CAPITÃO!</small><h2>Seu diário de bordo</h2><p>Acompanhe seus desejos, os baús que criou e os tesouros que já conquistou.</p></div><div class="dashboard-actions"><button class="gold-btn" id="dashboardNewList">＋ Novo Baú</button><button class="red-btn" id="dashboardNewProduct">＋ Adicionar produto</button></div></div>
+      <div class="section-head dashboard-section-head"><div><small class="eyebrow">VISÃO GERAL DA AVENTURA</small><h2>Seus tesouros em números</h2></div></div>
+      <div id="stats" class="stats-grid"></div>
+      <div class="dashboard-two-col">
+        <section class="panel progress-panel"><div class="panel-heading"><h3>🏴‍☠️ Progresso da coleção</h3><strong id="collectionProgressLabel">0%</strong></div><div class="progress-track"><div id="collectionProgressBar" class="progress-fill" style="width:0%"></div></div><p id="collectionProgressText">Você ainda não conquistou nenhum tesouro.</p><div class="progress-legend"><span><i class="dot bought-dot"></i> Conquistados</span><span><i class="dot desired-dot"></i> Desejados</span><span><i class="dot abandoned-dot"></i> Desistidos</span></div></section>
+        <section class="panel quick-summary"><h3>🧭 Rota da aventura</h3><div class="quick-line"><span>Baús criados</span><b id="summaryListCount">0</b></div><div class="quick-line"><span>Produtos cadastrados</span><b id="summaryProductCount">0</b></div><div class="quick-line"><span>Valor dos desejos</span><b id="summaryWishValue">฿ 0,00</b></div><div class="quick-line"><span>Investimento registrado</span><b id="summarySpent">฿ 0,00</b></div></section>
+      </div>
+      <div class="dashboard-two-col dashboard-lower">
+        <section class="panel"><div class="panel-heading"><h3>🧰 Baús recentes</h3><button class="text-action" data-go="wishlists">Ver todos</button></div><div id="summaryRecentLists" class="summary-list"></div></section>
+        <section class="panel"><div class="panel-heading"><h3>🍇 Últimos produtos</h3><button class="text-action" data-go="products">Ver todos</button></div><div id="summaryRecentProducts" class="summary-recent-products"></div></section>
+      </div>
+      <div class="panel"><h3>📉 Histórico recente de preços</h3><div id="priceHistory"></div></div>
+    </section>
+    <section id="view-wishlists" class="view hidden">
+      <div class="section-head"><div><small class="eyebrow">MAPA DAS SUAS AVENTURAS</small><h2><img class="heading-icon" src="assets/icons/luffy-flag.png" alt=""> Baús do Tesouro</h2></div><button class="red-btn" id="newWishlist">＋ Criar Baú</button></div>
+      <div id="allLists" class="wishlist-grid"></div>
+    </section>
+    <section id="view-products" class="view hidden">
+      <div class="section-head"><div><small class="eyebrow">CATÁLOGO DE RECOMPENSAS</small><h2><img class="heading-icon" src="assets/icons/gomu_gomu.png" alt=""> Produtos</h2></div><button class="red-btn" id="addProduct">＋ Novo tesouro</button></div>
+      <div class="toolbar"><div class="search-field"><img src="assets/icons/log_pose.png" alt=""><input id="searchProducts" placeholder="Buscar tesouro..."></div><select id="filterStatus"><option value="">Todos os status</option><option>Desejado</option><option>Comprado</option><option>Desistido</option></select><select id="filterList"><option value="">Todos os baús</option></select><select id="sortProducts"><option value="recent">Mais recentes</option><option value="name">Nome A–Z</option><option value="priceAsc">Menor preço</option><option value="priceDesc">Maior preço</option></select></div>
+      <div id="productGrid" class="poster-grid"></div>
+    </section>
+    <section id="view-conquered" class="view hidden">
+      <div class="section-head"><div><small class="eyebrow">MISSÃO CUMPRIDA</small><h2><img class="heading-icon" src="assets/icons/nami.png" alt=""> Tesouros conquistados</h2></div></div>
+      <div id="conqueredGrid" class="poster-grid"></div>
+    </section>
+    <section id="view-settings" class="view hidden">
+      <div class="section-head"><div><small class="eyebrow">CUIDE DO SEU NAVIO</small><h2><img class="heading-icon" src="assets/icons/franky.png" alt=""> Configurações</h2></div></div>
+      <div class="panel settings-panel"><h3>💾 Backup dos seus tesouros</h3><p>Os dados são sincronizados com a nuvem. Exporte um arquivo JSON para guardar uma cópia ou importe um backup anterior validado.</p><div class="actions"><button class="gold-btn" id="exportData">⬇ Exportar backup</button><label class="ghost-btn upload-label">⬆ Importar backup<input type="file" id="importData" accept="application/json"></label></div><p class="warning">Baús privados são entregues pelo serviço seguro somente após validação do PIN. Não compartilhe o PIN com outras pessoas.</p></div>
+    </section>
+  </main>
+</div>
+<dialog id="wishlistDialog">
+<form method="dialog" id="wishlistForm" class="modal">
+  <button class="close" value="cancel" aria-label="Fechar">×</button><small class="eyebrow">ADICIONAR UM NOVO BAÚ</small><h2>Novo Baú</h2>
+  <label>Nome da lista<input id="listName" required placeholder="Ex.: Coleção One Piece"></label>
+  <label>Descrição<textarea id="listDesc" placeholder="O que você pretende reunir nesta aventura?"></textarea></label>
+  <label class="privacy-toggle"><input type="checkbox" id="listPrivate"> <span>🔒 Classificar este baú como <b>Privado</b><small>Será solicitada uma senha de 4 dígitos ao tentar entrar.</small></span></label>
+  <label>Escolha uma capa</label><div class="cover-options" id="coverOptions">
+    <button type="button" class="cover-choice selected" data-cover="🏴‍☠️">🏴‍☠️<small>Bandeira</small></button><button type="button" class="cover-choice" data-cover="👒">👒<small>Chapéu</small></button><button type="button" class="cover-choice" data-cover="🚢">🚢<small>Navio</small></button><button type="button" class="cover-choice" data-cover="🍇">🍇<small>Fruta</small></button><button type="button" class="cover-choice" data-cover="🗺️">🗺️<small>Mapa</small></button>
+  </div>
+  <label>Ou envie sua própria imagem<input type="file" id="listImage" accept="image/*"></label>
+  <div class="modal-actions"><button class="ghost-btn" value="cancel">Cancelar</button><button class="red-btn" id="saveWishlist" value="default">Criar Baú</button></div>
+</form>
+</dialog>
+<dialog id="productDialog">
+<form method="dialog" id="productForm" class="modal">
+  <button class="close" value="cancel" aria-label="Fechar">×</button><small class="eyebrow">CADASTRO DE RECOMPENSA</small><h2 id="productModalTitle">Novo tesouro</h2>
+  <input type="hidden" id="productId">
+  <label>Nome do produto<input id="productName" required placeholder="Ex.: Action Figure Luffy Gear 5"></label>
+  <div class="two"><label>Preço em berries (฿)<input id="productPrice" type="number" min="0" step="0.01" required placeholder="299.90"></label><label>Loja<input id="productStore" placeholder="Ex.: Amazon"></label></div>
+  <label>Link do produto<input id="productUrl" type="url" placeholder="https://..."></label>
+  <div class="field-label"><label>Baús do Tesouro</label><div id="productLists" class="list-picker"></div><small>Você pode selecionar mais de um baú.</small></div>
+  <label>Imagem do produto<input id="productImage" type="file" accept="image/*"></label>
+  <div class="two"><label>Preço pago (opcional)<input id="productPaidPrice" type="number" min="0" step="0.01" placeholder="Preencha ao comprar"></label><label>Data da compra<input id="productPurchaseDate" type="date"></label></div>
+  <label>Observações<textarea id="productNotes" placeholder="Detalhes, tamanho, modelo..."></textarea></label>
+  <div class="modal-actions"><button class="ghost-btn" value="cancel">Cancelar</button><button class="red-btn" id="saveProduct" value="default">Salvar tesouro</button></div>
+</form>
+</dialog>
+<dialog id="detailDialog"><div id="detailContent" class="modal detail-modal"></div></dialog>
+<div id="toast" class="toast"></div>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("PWA indisponível:",err)));}</script>
+<script src="supabase-config.js"></script>
+<script src="app.js?v=2.0"></script>
+</body></html>

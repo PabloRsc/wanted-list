@@ -1,0 +1,32 @@
+WANTED LIST — PATCH DE SEGURANÇA 2.0
+
+Arquivo alterado:
+supabase/functions/wanted-list-secure/index.ts
+
+Como aplicar:
+1. No Supabase, abra Edge Functions > wanted-list-secure > Code.
+2. Abra o index.ts deste pacote e substitua TODO o conteúdo do editor.
+3. Confirme que as Secrets existentes são:
+   PROJECT_URL
+   SERVICE_ROLE_KEY
+   PRIVATE_CHEST_PIN
+4. Clique em Deploy updates.
+5. Não compartilhe a SERVICE_ROLE_KEY.
+
+O SQL supabase-secure-migration.sql já estava no pacote 1.9 e não precisa ser executado novamente
+se foi executado com sucesso. Ele cria wanted_list_pin_attempts e bloqueia acesso direto
+à tabela wanted_list_state para anon/authenticated.
+
+Correções:
+- load mantém os cartões de baús privados visíveis, mas não devolve produtos nem histórico
+  associados a qualquer baú privado.
+- saves sem PIN só atualizam conteúdo público e preservam listas, produtos e histórico privados
+  existentes no servidor.
+- produtos associados simultaneamente a listas públicas e privadas são tratados como privados.
+- tentativas inválidas também em save são limitadas: 8 falhas por IP em 15 minutos.
+- a leitura completa do estado só ocorre depois da validação do PIN em unlock.
+
+Nota importante:
+O PIN de 4 dígitos é uma proteção compartilhada, não uma identidade pessoal. Qualquer pessoa
+que descubra o PIN poderá acessar os baús privados. A limitação por IP reduz tentativas, mas
+não substitui autenticação individual.

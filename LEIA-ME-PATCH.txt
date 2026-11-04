@@ -1,0 +1,24 @@
+WANTED LIST — PATCH DE INTEGRAÇÃO SEGURA
+
+Arquivos alterados:
+- app.js
+
+O que foi corrigido:
+- Implementada a rotina de sincronização automática com a Edge Function wanted-list-secure (debounce de 650 ms).
+- As gravações remotas aguardam a conclusão de uma gravação em andamento e repetem a sincronização se houver alterações posteriores.
+- O cache local passa a guardar somente a visão pública: metadados dos baús e produtos/históricos não vinculados a baús privados.
+- Ao desbloquear um baú, os dados privados permanecem apenas em memória durante a sessão; não são gravados no localStorage.
+
+Como aplicar:
+1. Faça uma cópia da pasta atual do Wanted List.
+2. Extraia este ZIP.
+3. Substitua somente app.js na pasta principal do aplicativo.
+4. Mantenha index.html, styles.css, supabase-config.js, assets e demais arquivos atuais.
+5. Abra/recarregue o app com Ctrl+F5.
+
+Importante:
+- A Edge Function wanted-list-secure deve continuar publicada.
+- Não coloque SERVICE_ROLE_KEY no navegador. O supabase-config.js deve conter somente a chave publicável.
+- Depois de aplicar, teste criar/editar um item público e confirme que ele aparece após recarregar em outro navegador/dispositivo.
+- Teste também criar um baú privado, adicionar um produto e verificar que ele só aparece depois do PIN.
+- Este patch não altera a função Supabase nem o banco de dados.
