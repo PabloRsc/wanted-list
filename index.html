@@ -67,8 +67,8 @@
     <button type="button" class="cover-choice selected" data-cover="🏴‍☠️">🏴‍☠️<small>Bandeira</small></button><button type="button" class="cover-choice" data-cover="👒">👒<small>Chapéu</small></button><button type="button" class="cover-choice" data-cover="🚢">🚢<small>Navio</small></button><button type="button" class="cover-choice" data-cover="🍇">🍇<small>Fruta</small></button><button type="button" class="cover-choice" data-cover="🗺️">🗺️<small>Mapa</small></button>
   </div>
   <label>Ou envie sua própria imagem<input type="file" id="listImage" accept="image/*"></label>
-  <button type="button" class="ghost-btn cover-adjust-toggle" id="toggleCoverAdjust" hidden>Ajustar enquadramento</button>
-  <section class="cover-editor" id="coverEditor" aria-label="Ajustar enquadramento da capa"><div class="cover-preview" id="coverPreviewFrame"><img id="coverPreview" alt="Prévia do recorte da capa"></div><div class="cover-adjust"><small>Arraste a imagem dentro da moldura para escolher o enquadramento.</small><label>Posição horizontal <input id="coverX" type="range" min="0" max="100" value="50"></label><label>Posição vertical <input id="coverY" type="range" min="0" max="100" value="50"></label></div></section>
+  <button type="button" class="ghost-btn cover-adjust-toggle" id="toggleCoverAdjust" hidden><span>⌗</span> Ajustar enquadramento <span class="cover-chevron">⌄</span></button>
+  <section class="cover-editor" id="coverEditor" aria-label="Ajustar enquadramento da capa"><div class="cover-preview" id="coverPreviewFrame"><img id="coverPreview" alt="Prévia do recorte da capa"><div class="crop-grid" aria-hidden="true"></div></div><p class="cover-hint">☝ Arraste a imagem para posicionar</p><label class="cover-zoom-label">Zoom <input id="coverZoom" type="range" min="100" max="250" value="100"></label><input type="hidden" id="coverX" value="50"><input type="hidden" id="coverY" value="50"></section>
   <div class="modal-actions"><button class="ghost-btn" value="cancel">Cancelar</button><button class="red-btn" id="saveWishlist" value="default">Criar Baú</button></div>
 </form>
 </dialog>
