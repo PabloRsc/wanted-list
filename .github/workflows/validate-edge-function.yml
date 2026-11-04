@@ -1,0 +1,27 @@
+name: Validate Supabase Edge Function
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/functions/wanted-list-secure/**"
+      - ".github/workflows/validate-edge-function.yml"
+  pull_request:
+    paths:
+      - "supabase/functions/wanted-list-secure/**"
+      - ".github/workflows/validate-edge-function.yml"
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Format check
+        run: deno fmt --check supabase/functions/wanted-list-secure/index.ts
+      - name: Type check
+        run: deno check supabase/functions/wanted-list-secure/index.ts
