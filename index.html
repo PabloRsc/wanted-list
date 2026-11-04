@@ -35,7 +35,16 @@
 <dialog id="productDialog"><form method="dialog" id="productForm" class="modal"><button class="close" value="cancel" aria-label="Fechar">×</button><small class="eyebrow">CADASTRO DE RECOMPENSA</small><h2 id="productModalTitle">Novo tesouro</h2><input type="hidden" id="productId"><label>Nome do produto<input id="productName" required placeholder="Ex.: Action Figure Luffy Gear 5"></label><div class="two"><label>Preço em berries (฿)<input id="productPrice" type="number" min="0" step="0.01" required placeholder="299.90"></label><label>Loja<input id="productStore" placeholder="Ex.: Amazon"></label></div><label>Link do produto<input id="productUrl" type="url" placeholder="https://..."></label><div class="field-label"><label>Baús do Tesouro</label><div id="productLists" class="list-picker"></div><small>Você pode selecionar mais de um baú.</small></div><label>Imagem do produto<input id="productImage" type="file" accept="image/*"></label><div class="two"><label>Preço pago (opcional)<input id="productPaidPrice" type="number" min="0" step="0.01" placeholder="Preencha ao comprar"></label><label>Data da compra<input id="productPurchaseDate" type="date"></label></div><label>Observações<textarea id="productNotes" placeholder="Detalhes, tamanho, modelo..."></textarea></label><div class="modal-actions"><button class="ghost-btn" value="cancel">Cancelar</button><button class="red-btn" id="saveProduct" value="default">Salvar tesouro</button></div></form></dialog>
 <dialog id="detailDialog"><div id="detailContent" class="modal detail-modal"></div></dialog><div id="toast" class="toast"></div>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("PWA indisponível:",err)));}</script>
-<script src="supabase-config.js?v=cloudtimeout4"></script>
-<script src=""></script>
-<script src="app.js?v=cloudtimeout4"></script>
+<script>
+window.addEventListener('error',event=>{
+  const el=document.querySelector('.local-pill');
+  if(!el)return;
+  const target=event.target;
+  if(target&&target.tagName==='SCRIPT') el.textContent='ERRO AO CARREGAR: '+(target.src.split('/').pop()||'script');
+  else el.textContent='ERRO NO APLICATIVO: '+(event.message||'falha de execução');
+  el.classList.remove('cloud-online');
+},true);
+</script>
+<script src="supabase-config.js?v=cloudtimeout5" onerror="document.querySelector('.local-pill').textContent='ERRO AO CARREGAR CONFIGURAÇÃO SUPABASE'"></script>
+<script src="app.js?v=cloudtimeout5" onerror="document.querySelector('.local-pill').textContent='ERRO AO CARREGAR app.js'"></script>
 </body></html>
