@@ -310,3 +310,15 @@ dialog .modal{
 }
 
 .cover-adjust-toggle{margin-top:10px}.cover-adjust-toggle[hidden]{display:none!important}
+
+/* Fixed WhatsApp-style cover crop viewport: never expands with source image */
+.cover-editor{display:none!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;padding:10px!important;margin:10px 0!important;max-height:none!important}
+.cover-editor.has-image.is-open{display:grid!important}
+.cover-preview{position:relative!important;width:100%!important;height:auto!important;aspect-ratio:16/7!important;min-height:0!important;max-height:190px!important;overflow:hidden!important;border-radius:9px!important;background:#111!important;touch-action:none!important;cursor:grab!important}
+.cover-preview.is-dragging{cursor:grabbing!important}
+.cover-preview img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 50%;pointer-events:none!important}
+.cover-adjust{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px 12px!important;min-width:0!important}
+.cover-adjust small{grid-column:1/-1!important;font-size:12px!important}
+.cover-adjust label{display:block!important;min-width:0!important;margin:2px 0!important}
+.cover-adjust input[type=range]{width:100%!important;min-height:25px!important;padding:0!important}
+@media(max-width:560px){.cover-editor.has-image.is-open{grid-template-columns:1fr!important}.cover-preview{height:auto!important;aspect-ratio:16/7!important;max-height:160px!important}.cover-adjust{grid-template-columns:1fr 1fr!important}}
