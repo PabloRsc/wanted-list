@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wanted-list-pwa-cover-editor-v5';
+const CACHE_NAME = 'wanted-list-pwa-chest-context-v1';
 const APP_SHELL = [
   './',
   './index.html',
