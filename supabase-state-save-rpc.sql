@@ -38,7 +38,18 @@ begin
    where id = 1
    for update;
 
-  if p_allow_private or v_current is null then
+  if p_allow_private then
+    v_result := p_incoming;
+  elsif v_current is null then
+    -- Estado inicial público é permitido, mas a primeira lista privada
+    -- precisa passar pelo fluxo de autenticação, mesmo sem linha existente.
+    if exists (
+      select 1
+        from jsonb_array_elements(coalesce(p_incoming->'lists','[]'::jsonb)) x
+       where x->>'isPrivate' = 'true'
+    ) then
+      raise exception 'private chest creation requires authentication';
+    end if;
     v_result := p_incoming;
   else
     select coalesce(array_agg(x->>'id'), array[]::text[])
