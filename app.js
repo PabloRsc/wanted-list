@@ -34,14 +34,14 @@ async function persistCloud(){
   }finally{remoteSaving=false}
 }
 async function unlockPrivateChest(listId){
-  const pin=window.prompt('Este baú é privado. Digite o PIN de 4 dígitos para acessar:');
+  const pin=window.prompt('Este baú é privado. Digite sua senha de acesso (mínimo de 16 caracteres):');
   if(pin===null)return false;
   if(!/^\d{4}$/.test(pin)){toast('Digite um PIN de 4 dígitos.');return false;}
   try{
     const result=await secureApi('unlock',{},pin);
     data=normalize(result.payload||defaults);privateAccessPin=pin;unlockedPrivateLists.add(listId);
     localStorage.setItem(KEY,JSON.stringify(publicSnapshot(data)));lastPersistedSnapshot=JSON.stringify(data);render();toast('Baú privado desbloqueado nesta sessão.');return true;
-  }catch(err){toast(err.message==='PIN_INVALID'?'PIN incorreto. Acesso não autorizado.':(err.message||'Não foi possível desbloquear o baú.'));return false;}
+  }catch(err){toast(err.message==='PIN_INVALID'?'Senha incorreta. Acesso não autorizado.':err.message==='PIN_RATE_LIMIT'?'Muitas tentativas. Aguarde 15 minutos antes de tentar novamente.':(err.message||'Não foi possível desbloquear o baú.'));return false;}
 }
 function clone(v){return JSON.parse(JSON.stringify(v))}
 function normalize(d){
