@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const KEY='wanted-list-cloud-v1', SCHEMA_VERSION=2;
 const defaults={schemaVersion:SCHEMA_VERSION,lists:[],products:[],history:[]};
-let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50;
+let data=load(), lastPersistedSnapshot=JSON.stringify(data), selectedCover='🏴‍☠️', pendingListImage='',clearListImage=false,pendingProductImage='',editingListId=null,coverX=50,coverY=50,coverZoom=1,coverDrag=null;
 let remoteSaveTimer=null, remoteReady=false, remoteSaving=false;
 const unlockedPrivateLists=new Set();
 let privateAccessPin='';
@@ -46,7 +46,7 @@ async function unlockPrivateChest(listId){
 function clone(v){return JSON.parse(JSON.stringify(v))}
 function normalize(d){
   if(!d||typeof d!=='object'||!Array.isArray(d.lists)||!Array.isArray(d.products)) throw new Error('Estrutura de backup inválida');
-  const lists=d.lists.map(l=>({id:String(l.id||id()),name:String(l.name||'Baú sem nome'),desc:String(l.desc||''),cover:String(l.cover||'🏴‍☠️'),image:safeImage(l.image),coverX:Math.max(0,Math.min(100,Number(l.coverX??50))),coverY:Math.max(0,Math.min(100,Number(l.coverY??50))),isPrivate:l.isPrivate===true,created:l.created||new Date().toISOString()}));
+  const lists=d.lists.map(l=>({id:String(l.id||id()),name:String(l.name||'Baú sem nome'),desc:String(l.desc||''),cover:String(l.cover||'🏴‍☠️'),image:safeImage(l.image),coverX:Math.max(0,Math.min(100,Number(l.coverX??50))),coverY:Math.max(0,Math.min(100,Number(l.coverY??50))),coverZoom:Math.max(1,Math.min(2.5,Number(l.coverZoom??1))),isPrivate:l.isPrivate===true,created:l.created||new Date().toISOString()}));
   const listIds=new Set(lists.map(l=>l.id));
   if(listIds.size!==lists.length)throw new Error('O backup contém IDs de wishlist duplicados.');
   const products=d.products.map(p=>({
@@ -132,7 +132,7 @@ function readImage(file,cb){
   reader.onerror=()=>toast('Falha ao carregar a imagem.');reader.readAsDataURL(file)
 }
 function openWishlist(list=null){
-  editingListId=list?.id||null;pendingListImage='';clearListImage=false;$('#wishlistForm').reset();coverX=list?.coverX??50;coverY=list?.coverY??50;$('#coverX').value=coverX;$('#coverY').value=coverY;updateCoverPreview(list?.image||'');
+  editingListId=list?.id||null;pendingListImage='';clearListImage=false;$('#wishlistForm').reset();coverX=list?.coverX??50;coverY=list?.coverY??50;coverZoom=list?.coverZoom??1;$('#coverZoom').value=Math.round(coverZoom*100);updateCoverPreview(list?.image||'');
   selectedCover=list?.cover||'🏴‍☠️';$$('.cover-choice').forEach(b=>b.classList.toggle('selected',b.dataset.cover===selectedCover));
   $('#listName').value=list?.name||'';$('#listDesc').value=list?.desc||'';
   $('#listPrivate').checked=list?.isPrivate===true;
@@ -143,15 +143,21 @@ function openWishlist(list=null){
 }
 if($('#newWishlist'))$('#newWishlist').onclick=()=>openWishlist();if($('#newWishlistTop'))$('#newWishlistTop').onclick=()=>openWishlist();if($('#dashboardNewList'))$('#dashboardNewList').onclick=()=>openWishlist();if($('#dashboardNewProduct'))$('#dashboardNewProduct').onclick=()=>openProduct();
 $$('.cover-choice').forEach(b=>b.onclick=()=>{selectedCover=b.dataset.cover;clearListImage=true;$$('.cover-choice').forEach(x=>x.classList.toggle('selected',x===b))});
-function updateCoverPreview(src){const editor=$('#coverEditor'),img=$('#coverPreview');if(!editor||!img)return;const value=src||pendingListImage;editor.classList.toggle('has-image',!!value);if(value){img.src=value;img.style.objectPosition=`${coverX}% ${coverY}%`;}else{img.removeAttribute('src')}}
-['coverX','coverY'].forEach(id=>$('#'+id).addEventListener('input',()=>{coverX=Number($('#coverX').value);coverY=Number($('#coverY').value);if($('#coverPreview').src)$('#coverPreview').style.objectPosition=`${coverX}% ${coverY}%`}));
+function updateCoverPreview(src){
+const editor=$('#coverEditor'),img=$('#coverPreview');if(!editor||!img)return;const value=src||pendingListImage;editor.classList.toggle('has-image',!!value);
+if(value){img.src=value;img.style.objectPosition=coverX+'% '+coverY+'%';img.style.transform='scale('+coverZoom+')'}else{img.removeAttribute('src')}}
+$('#coverZoom').addEventListener('input',()=>{coverZoom=Number($('#coverZoom').value)/100;$('#coverPreview').style.transform='scale('+coverZoom+')'});
+const coverFrame=$('#coverPreviewFrame');
+coverFrame.addEventListener('pointerdown',e=>{if(!$('#coverPreview').src)return;coverDrag={x:e.clientX,y:e.clientY};coverFrame.setPointerCapture(e.pointerId);coverFrame.classList.add('is-dragging');e.preventDefault()});
+coverFrame.addEventListener('pointermove',e=>{if(!coverDrag)return;const rect=coverFrame.getBoundingClientRect();coverX=Math.max(0,Math.min(100,coverX-(e.clientX-coverDrag.x)/rect.width*100));coverY=Math.max(0,Math.min(100,coverY-(e.clientY-coverDrag.y)/rect.height*100));coverDrag={x:e.clientX,y:e.clientY};$('#coverPreview').style.objectPosition=coverX+'% '+coverY+'%'});
+const stopCoverDrag=()=>{coverDrag=null;coverFrame.classList.remove('is-dragging')};coverFrame.addEventListener('pointerup',stopCoverDrag);coverFrame.addEventListener('pointercancel',stopCoverDrag);
 $('#listImage').onchange=e=>readImage(e.target.files[0],v=>{pendingListImage=v;clearListImage=false;updateCoverPreview(v)});
 $('#wishlistForm').onsubmit=e=>{
   e.preventDefault();
   const name=$('#listName').value.trim();if(!name){toast('Informe o nome do baú.');return}
   const existing=data.lists.find(l=>l.id===editingListId);
   const isPrivate=$('#listPrivate').checked;
-  if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,isPrivate});
+  if(existing)Object.assign(existing,{name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage||(clearListImage?'':existing.image||''),coverX,coverY,coverZoom,isPrivate});
   else data.lists.push({id:id(),name,desc:$('#listDesc').value.trim(),cover:selectedCover,image:pendingListImage,coverX,coverY,isPrivate,created:new Date().toISOString()});
   $('#wishlistDialog').close();if(save())toast(existing?'Baú atualizado!':'Novo baú criado!')
 };
@@ -216,9 +222,9 @@ function canSeeProduct(p){
 function listCard(l){
   const locked=l.isPrivate&&!unlockedPrivateLists.has(l.id);
   const activeProducts=locked?[]:data.products.filter(p=>(p.lists||[]).includes(l.id)&&p.status==='Desejado'&&canSeeProduct(p));
-  const count=activeProducts.length;
-  const total=activeProducts.reduce((s,p)=>s+Number(p.price||0),0);
-  return `<article class="list-card" data-list="${esc(l.id)}"><div class="list-cover" style="${l.image?`background-image:url('${l.image}');background-size:cover;background-position:${Number(l.coverX??50)}% ${Number(l.coverY??50)}%`:''}">${l.image?'':esc(l.cover)}</div><div class="list-body"><h3>${esc(l.name)} ${l.isPrivate?'🔒':''}</h3><p>${esc(l.desc||'Uma nova aventura começa aqui.')}</p><div class="list-privacy">${l.isPrivate?'🔒 PRIVADO · exige PIN':'🌐 PÚBLICO'}</div><div class="list-meta"><span>${locked?'🔒 Conteúdo protegido':`📦 ${count} desejos ativos`}</span><b>${locked?'••••':money(total)}</b></div><div class="list-actions"><button type="button" data-edit-list="${esc(l.id)}">Editar</button><button type="button" data-delete-list="${esc(l.id)}">Excluir</button></div></div></article>`
+  const count=activeProducts.length,total=activeProducts.reduce((s,p)=>s+Number(p.price||0),0);
+  const cover=l.image?'<img src="'+esc(l.image)+'" alt="" style="object-position:'+Number(l.coverX??50)+'% '+Number(l.coverY??50)+'%;transform:scale('+Number(l.coverZoom??1)+')">':esc(l.cover);
+  return '<article class="list-card" data-list="'+esc(l.id)+'"><div class="list-cover">'+cover+'</div><div class="list-body"><h3>'+esc(l.name)+' '+(l.isPrivate?'🔒':'')+'</h3><p>'+esc(l.desc||'Uma nova aventura começa aqui.')+'</p><div class="list-privacy">'+(l.isPrivate?'🔒 PRIVADO · exige PIN':'🌐 PÚBLICO')+'</div><div class="list-meta"><span>'+(locked?'🔒 Conteúdo protegido':'📦 '+count+' desejos ativos')+'</span><b>'+(locked?'••••':money(total))+'</b></div><div class="list-actions"><button type="button" data-edit-list="'+esc(l.id)+'">Editar</button><button type="button" data-delete-list="'+esc(l.id)+'">Excluir</button></div></div></article>';
 }
 function render(){
   const lists=data.lists,products=data.products;
