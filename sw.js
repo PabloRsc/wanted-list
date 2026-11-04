@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wanted-list-pwa-productimport1';
+const CACHE_NAME = 'wanted-list-pwa-productimport2';
 const APP_SHELL = [
   './',
   './index.html',
